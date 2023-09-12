@@ -154,6 +154,9 @@ tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择�
 'Deutsch': {'title': "Willkommen im Emma Story Club:",'lang': "Bitte wählen Sie die Sprache",'length': "Bitte geben Sie die Länge der Geschichte ein",'type': "Welche Art von Geschichte möchten Sie hören?",'char': "Was sind die Charaktere in der Geschichte?",'la': "Wo findet die Geschichte statt?",'end': "Welche Art von Geschichte Ende wollen Sie?",'btn': "Geschichte generieren"},
 'русский': {'title': "Добро пожаловать в клуб историй Эммы:",'lang': "Пожалуйста, выберите язык",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",'char': "Кто герои истории?",'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю"}}
 
+def get_story():
+    st.session_state.story=True
+
 def story():
     st.title("Emma & ChatGPT")    
     st.header("故事大王")
@@ -184,7 +187,7 @@ def story():
     params['char'] = st.text_input(tips[lang]['char'])
     params['la'] = st.text_input(tips[lang]['la'])
     params['end'] = st.text_input(tips[lang]['end'])
-    st.button(tips[lang]['btn'],on_click=story)
+    st.button(tips[lang]['btn'],on_click=get_story)
 
     if st.session_state.story:
         msg ="写一个故事，包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params['type'] ,params['char'],params['la'],params['end'])
