@@ -202,6 +202,13 @@ def story():
 def choose_continent():
     st.session_state.continent=True
 
+def choose_country():
+    st.session_state.country=True
+
+def choose_area():
+    st.session_state.area=True
+
+
 def travel():
     st.title("Emma & ChatGPT")    
     st.header("旅游推荐")
@@ -216,6 +223,13 @@ def travel():
     if 'continent' not in st.session_state:
         st.session_state.continent=False
 
+    if 'country' not in st.session_state:
+        st.session_state.country=False
+
+    if 'area' not in st.session_state:
+        st.session_state.area=False
+
+
     continent = st.selectbox(
     '请选择',
     ['南美洲', '非洲', '欧洲','亚洲','北美洲','大洋洲'], #也可以用元组
@@ -229,46 +243,51 @@ def travel():
         st.write(obj)
 
         country = st.text_input("你要去哪个国家旅游？")
-        message.pop()
-        message.append({"role":"user","content":"列举%s所有的省(州、邦)"%(country)})
-        obj = chatgpt(message,max_tokens=500,temperature=0)
-        st.write(obj)
-        area = st.text_input("你要去哪个地区旅游？")
+        st.button("就去这个国家",on_click=choose_country)
 
-        message.pop()
-        message.append({"role":"user","content":"列举%s%s有名的名胜古迹"%(country,area)})
-        res = chatgpt(message,max_tokens=500,temperature=0)
-        st.write("名胜古迹")
-        st.write(res)
+        if st.session_state.country:
+            message.pop()
+            message.append({"role":"user","content":"列举%s所有的省(州、邦)"%(country)})
+            obj = chatgpt(message,max_tokens=500,temperature=0)
+            st.write(obj)
+            area = st.text_input("你要去哪个地区旅游？")
+            st.button("就去这个地区",on_click=choose_area)
 
-        message.pop()
-        message.append({"role":"user","content":"列举%s%s有名的自然风光"%(country,area)})
-        res = chatgpt(message,max_tokens=500,temperature=0)
-        st.write("自然风光")
-        st.write(res)
+            if st.session_state.area:
+                message.pop()
+                message.append({"role":"user","content":"列举%s%s有名的名胜古迹"%(country,area)})
+                res = chatgpt(message,max_tokens=500,temperature=0)
+                st.write("名胜古迹")
+                st.write(res)
 
-        message.pop()
-        message.append({"role":"user","content":"列举%s%s有名的经典美食"%(country,area)})
-        res = chatgpt(message,max_tokens=500,temperature=0)
-        st.write("经典美食")
-        st.write(res)
+                message.pop()
+                message.append({"role":"user","content":"列举%s%s有名的自然风光"%(country,area)})
+                res = chatgpt(message,max_tokens=500,temperature=0)
+                st.write("自然风光")
+                st.write(res)
 
-        message.pop()
-        message.append({"role":"user","content":"介绍%s%s的交通状况"%(country,area)})
-        res = chatgpt(message,max_tokens=500,temperature=0)
-        st.write("交通状况")
-        st.write(res)
+                message.pop()
+                message.append({"role":"user","content":"列举%s%s有名的经典美食"%(country,area)})
+                res = chatgpt(message,max_tokens=500,temperature=0)
+                st.write("经典美食")
+                st.write(res)
+
+                message.pop()
+                message.append({"role":"user","content":"介绍%s%s的交通状况"%(country,area)})
+                res = chatgpt(message,max_tokens=500,temperature=0)
+                st.write("交通状况")
+                st.write(res)
         
-        more = st.selectbox(
-        '详细了解',
-        ['名胜古迹','自然风光','经典美食','交通状况'], #也可以用元组
-        index = 0
-        )
+                more = st.selectbox(
+                '详细了解',
+                ['名胜古迹','自然风光','经典美食','交通状况'], #也可以用元组
+                index = 0
+                )
 
-        message.pop()
-        message.append({"role":"user","content":"请详细介绍%s%s的%s"%(country,area,more)})
-        res = chatgpt(message,max_tokens=500,temperature=0)
-        st.write(res)
+                message.pop()
+                message.append({"role":"user","content":"请详细介绍%s%s的%s"%(country,area,more)})
+                res = chatgpt(message,max_tokens=500,temperature=0)
+                st.write(res)
 
     return
 
