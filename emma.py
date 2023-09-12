@@ -242,18 +242,18 @@ def travel():
         obj = chatgpt(message,max_tokens=500,temperature=0)
         st.write(obj)
 
-        country = st.text_input("你要去哪个国家旅游？")
+        country = st.text_input("你要去哪个国家旅游？",placeholder="国家")
         st.button("就去这个国家",on_click=choose_country)
 
-        if st.session_state.country:
+        if st.session_state.country and country:
             message.pop()
             message.append({"role":"user","content":"列举%s所有的省(州、邦)"%(country)})
             obj = chatgpt(message,max_tokens=500,temperature=0)
             st.write(obj)
-            area = st.text_input("你要去哪个地区旅游？")
+            area = st.text_input("你要去哪个地区旅游？",placeholder="地区")
             st.button("就去这个地区",on_click=choose_area)
 
-            if st.session_state.area:
+            if st.session_state.area and area:
                 message.pop()
                 message.append({"role":"user","content":"列举%s%s有名的名胜古迹"%(country,area)})
                 res = chatgpt(message,max_tokens=500,temperature=0)
@@ -326,7 +326,7 @@ def career():
 
     msg ="兴趣爱好是%s,技能特长是%s,最看重%s,给出三种最合适的职业推荐"%(interest,skill,values)
     st.button("开始规划",on_click=career_plan)
-    if st.session_state.career1:
+    if st.session_state.career1 and interest and skill and values:
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=300,temperature=0.6)
         st.write(res)
