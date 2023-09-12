@@ -25,6 +25,7 @@ def get_key():
     st.session_state.api_key = mykey
     return
 
+@st.cache_data
 def chatgpt(message,max_tokens=100,temperature=0):
     rsp = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -192,14 +193,149 @@ def story():
             msg = chatgpt(message,max_tokens=200,temperature=0)
             message.pop()
         
-        rtn = message.append({"role":"user","content":msg})
+        message.append({"role":"user","content":msg})
+        rtn = chatgpt(message,max_tokens=params["length"],temperature=0.6)
         st.write(rtn)
 
     return
+
+def choose_continent():
+    st.session_state.continent=True
+
+def travel():
+    st.title("Emma & ChatGPT")    
+    st.header("旅游推荐")
+    message  = [{"role":"system","content":"导游"}]
+
+    if 'api_key' not in st.session_state or not st.session_state.api_key:
+        st.write("请先输入你的chatGPT API Key")
+        return
+    else:
+        openai.api_key = st.session_state.api_key
+
+    if 'continent' not in st.session_state:
+        st.session_state.continent=False
+
+    continent = st.selectbox(
+    '请选择',
+    ['南美洲', '非洲', '欧洲','亚洲','北美洲','大洋洲'], #也可以用元组
+    index = 0
+    )
+    
+    st.button("选好了",on_click=choose_continent)
+    if st.session_state.continent:
+        message.append({"role":"user","content":"列举%s所有的国家"%(continent)})
+        obj = chatgpt(message,max_tokens=500,temperature=0)
+        st.write(obj)
+
+        country = st.text_input("你要去哪个国家旅游？")
+        message.pop()
+        message.append({"role":"user","content":"列举%s所有的省(州、邦)"%(country)})
+        obj = chatgpt(message,max_tokens=500,temperature=0)
+        st.write(obj)
+        area = st.text_input("你要去哪个地区旅游？")
+
+        message.pop()
+        message.append({"role":"user","content":"列举%s%s有名的名胜古迹"%(country,area)})
+        res = chatgpt(message,max_tokens=500,temperature=0)
+        st.write("名胜古迹")
+        st.write(res)
+
+        message.pop()
+        message.append({"role":"user","content":"列举%s%s有名的自然风光"%(country,area)})
+        res = chatgpt(message,max_tokens=500,temperature=0)
+        st.write("自然风光")
+        st.write(res)
+
+        message.pop()
+        message.append({"role":"user","content":"列举%s%s有名的经典美食"%(country,area)})
+        res = chatgpt(message,max_tokens=500,temperature=0)
+        st.write("经典美食")
+        st.write(res)
+
+        message.pop()
+        message.append({"role":"user","content":"介绍%s%s的交通状况"%(country,area)})
+        res = chatgpt(message,max_tokens=500,temperature=0)
+        st.write("交通状况")
+        st.write(res)
+        
+        more = st.selectbox(
+        '详细了解',
+        ['名胜古迹','自然风光','经典美食','交通状况'], #也可以用元组
+        index = 0
+        )
+
+        message.pop()
+        message.append({"role":"user","content":"请详细介绍%s%s的%s"%(country,area,more)})
+        res = chatgpt(message,max_tokens=500,temperature=0)
+        st.write(res)
+
+    return
+
+def career_plan():
+    st.session_state.career1=  True
+
+def re_plan():
+    st.session_state.career2=  True
+
+def career_analyze():
+    st.session_state.career3=  True
+
+def career():
+    st.title("Emma & ChatGPT")    
+    st.header("职业选择")
+    message  = [{"role":"system","content":"职业规划师"}]
+
+    if 'api_key' not in st.session_state or not st.session_state.api_key:
+        st.write("请先输入你的chatGPT API Key")
+        return
+    else:
+        openai.api_key = st.session_state.api_key
+
+    interest = st.text_input("兴趣爱好",placeholder="你喜欢将时间花在什么上面")        
+    skill = st.text_input("技能特长 ",placeholder="可以是写作这样的硬实力，也可以是领导力这样的软实力")
+    values = st.text_input("价值观",placeholder="选择工作你最看重什么?兴趣、工资、地理位置...")
+
+    if 'career1' not in st.session_state:
+        st.session_state.career1=False
+
+    if 'career2' not in st.session_state:
+        st.session_state.career2=False
+
+    if 'career3' not in st.session_state:
+        st.session_state.career3=False
+
+    msg ="兴趣爱好是%s,技能特长是%s,最看重%s,给出三种最合适的职业推荐"
+    st.button("开始规划",on_click=career_plan)
+    if st.session_state.career1:
+        message.append({"role":"user","content":msg})
+        res = chatgpt(message,max_tokens=100,temperature=0.6)
+        st.write(res)
+    
+        msg ="兴趣爱好是%s,技能特长是%s,最看重%s,另外给出三种最合适的职业推荐"
+        st.button("重新规划",on_click=re_plan)
+        if st.session_state.career2:
+            message.append({"role":"assistant","content":res})
+            message.append({"role":"user","content":msg})
+            res = chatgpt(message,max_tokens=200,temperature=0.8)
+            st.write(res)
+        
+        st.button("详细介绍",on_click=career_analyze)
+        if st.session_state.career3:
+            message.append({"role":"assistant","content":res})
+            message.append({"role":"user","content":"详细介绍这三种职业"})
+            res = chatgpt(message,max_tokens=500,temperature=0.5)
+            st.write(res)
+        
+    return
+
 
 app = MultiApp()
 app.add_app("API Key", get_key)
 app.add_app("历史人物", people)
 app.add_app("情绪支持", emotion)
 app.add_app("故事大王", story)
+app.add_app("旅游推荐", travel)
+app.add_app("职业选择", career)
+
 app.run()
