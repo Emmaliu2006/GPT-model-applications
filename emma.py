@@ -305,14 +305,14 @@ def career():
     if 'career3' not in st.session_state:
         st.session_state.career3=False
 
-    msg ="兴趣爱好是%s,技能特长是%s,最看重%s,给出三种最合适的职业推荐"
+    msg ="兴趣爱好是%s,技能特长是%s,最看重%s,给出三种最合适的职业推荐"%(interest,skill,values)
     st.button("开始规划",on_click=career_plan)
     if st.session_state.career1:
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=100,temperature=0.6)
         st.write(res)
     
-        msg ="兴趣爱好是%s,技能特长是%s,最看重%s,另外给出三种最合适的职业推荐"
+        msg ="兴趣爱好是%s,技能特长是%s,最看重%s,另外给出三种最合适的职业推荐"%(interest,skill,values)
         st.button("重新规划",on_click=re_plan)
         if st.session_state.career2:
             message.append({"role":"assistant","content":res})
