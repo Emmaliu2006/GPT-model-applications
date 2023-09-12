@@ -15,7 +15,7 @@ class MultiApp:
         title = st.sidebar.radio(
             '请选择',
             self.apps,
-            format_func=lambda 'title': str(title))
+            format_func=lambda title: str(title))
         self.app_dict[title]()
 
 def get_key():
@@ -76,6 +76,9 @@ def more_click():
 
 def emo_analyze():
     st.session_state.emo_analyze = True
+
+def story():
+    st.session_state.story = True
 
 
 def people():
@@ -144,15 +147,17 @@ def emotion():
     return
 
 tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择语言种类:",'length': "请输入故事长度",'type': "您想听什么类型的故事?",'char': "故事有哪些角色?",'la': "故事发生在什么地方?",'end': "您想要什么样的故事结局?",'btn': "生成故事"},
-'英语': {'title': "Welcome to Emma's Story Club:",'lang': "Please select language",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",'char': "What are the characters in the story?",'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story"},
-'日语': {'title': "エマの物語クラブへようこそ:",'lang': "言語を選択してください",'length': "物語の長さを入力してください",'type': "どのような種類の物語を聞きたいですか？",'char': "物語のキャラクターは何ですか？",'la': "物語はどこで起こりますか？",'end': "どのような物語の結末が欲しいですか？",'btn': "物語を生成する"},
-'法语': {'title': "Bienvenue au club d'histoires d'Emma:",'lang': "Veuillez sélectionner la langue",'length': "Veuillez saisir la longueur de l'histoire",'type': "Quel type d'histoire voulez-vous entendre?",'char': "Quels sont les personnages de l'histoire?",'la': "Où se déroule l'histoire?",'end': "Quel genre de fin d'histoire voulez-vous?",'btn': "Générer une histoire"},
-'德语': {'title': "Willkommen im Emma Story Club:",'lang': "Bitte wählen Sie die Sprache",'length': "Bitte geben Sie die Länge der Geschichte ein",'type': "Welche Art von Geschichte möchten Sie hören?",'char': "Was sind die Charaktere in der Geschichte?",'la': "Wo findet die Geschichte statt?",'end': "Welche Art von Geschichte Ende wollen Sie?",'btn': "Geschichte generieren"},
-'俄语': {'title': "Добро пожаловать в клуб историй Эммы:",'lang': "Пожалуйста, выберите язык",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",'char': "Кто герои истории?",'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю"}}
+'English': {'title': "Welcome to Emma's Story Club:",'lang': "Please select language",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",'char': "What are the characters in the story?",'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story"},
+'日本語': {'title': "エマの物語クラブへようこそ:",'lang': "言語を選択してください",'length': "物語の長さを入力してください",'type': "どのような種類の物語を聞きたいですか？",'char': "物語のキャラクターは何ですか？",'la': "物語はどこで起こりますか？",'end': "どのような物語の結末が欲しいですか？",'btn': "物語を生成する"},
+'Français': {'title': "Bienvenue au club d'histoires d'Emma:",'lang': "Veuillez sélectionner la langue",'length': "Veuillez saisir la longueur de l'histoire",'type': "Quel type d'histoire voulez-vous entendre?",'char': "Quels sont les personnages de l'histoire?",'la': "Où se déroule l'histoire?",'end': "Quel genre de fin d'histoire voulez-vous?",'btn': "Générer une histoire"},
+'Deutsch': {'title': "Willkommen im Emma Story Club:",'lang': "Bitte wählen Sie die Sprache",'length': "Bitte geben Sie die Länge der Geschichte ein",'type': "Welche Art von Geschichte möchten Sie hören?",'char': "Was sind die Charaktere in der Geschichte?",'la': "Wo findet die Geschichte statt?",'end': "Welche Art von Geschichte Ende wollen Sie?",'btn': "Geschichte generieren"},
+'русский': {'title': "Добро пожаловать в клуб историй Эммы:",'lang': "Пожалуйста, выберите язык",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",'char': "Кто герои истории?",'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю"}}
 
 def story():
     st.title("Emma & ChatGPT")    
     st.header("故事大王")
+    message  = [{"role":"system","content":"作家"}]
+
     if 'api_key' not in st.session_state or not st.session_state.api_key:
         st.write("请先输入你的chatGPT API Key")
         return
@@ -161,14 +166,34 @@ def story():
 
     if 'language' not in st.session_state:
         st.session_state.language='中文'
-        
-    lang = st.selectbox(
-    "请选择语言种类",
-    ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
-    index = 1
-    )
 
-    st.write('You selected {}.'.format(lang))
+    if 'story' not in st.session_state:
+        st.session_state.story=False
+
+    params = {}
+    lang = st.selectbox(
+    tips[st.session_state.language]['lang'],
+    ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
+    index = 0
+    )
+    st.session_state.language=lang
+
+    params['length'] = st.number_input(tips[lang]['length'],min_value=100,max_value=1000,value=500)
+    params['type'] = st.text_input(tips[lang]['type'])
+    params['char'] = st.text_input(tips[lang]['char'])
+    params['la'] = st.text_input(tips[lang]['la'])
+    params['end'] = st.text_input(tips[lang]['end'])
+    st.button(tips[lang]['btn'],on_click=story)
+
+    if st.session_state.story:
+        msg ="写一个故事，包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params['type'] ,params['char'],params['la'],params['end'])
+        if lang != '中文':
+            message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
+            msg = chatgpt(message,max_tokens=200,temperature=0)
+            message.pop()
+        
+        rtn = message.append({"role":"user","content":msg})
+        st.write(rtn)
 
     return
 
