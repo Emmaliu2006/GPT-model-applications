@@ -351,13 +351,22 @@ def career():
         
     return
 
+def demo():
+    st.title("Emma & ChatGPT")    
+    st.header("使用演示")
+    #video_file = open('demo.mp4', 'rb')
+    #data  = video_file.read()
+    #st.video(data)    
+    return
 
 app = MultiApp()
+app.add_app("使用演示",demo)
 app.add_app("API Key", get_key)
 app.add_app("历史人物", people)
 app.add_app("情绪支持", emotion)
 app.add_app("故事大王", story)
 app.add_app("旅游推荐", travel)
 app.add_app("职业选择", career)
+
 
 app.run()
