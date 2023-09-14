@@ -353,9 +353,10 @@ def career():
 def demo():
     st.title("Emma & ChatGPT")    
     st.header("使用演示")
-    #video_file = open('demo.mp4', 'rb')
-    #data  = video_file.read()
-    #st.video(data)    
+    video_file = open('demo.mp4', 'rb')
+    data  = video_file.read()
+    st.video(data)    
+
     return
 
 app = MultiApp()
