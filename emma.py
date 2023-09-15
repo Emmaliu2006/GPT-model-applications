@@ -23,9 +23,7 @@ def get_key():
     st.title("Emma & ChatGPT")
     st.header("ChatGPT API Key")
     mykey = st.text_input("请输入你的API Key",placeholder ="sk-")
-    st.session_state.api_key = mykey
-    ss = st.slider("剧情",0,1,0.6)
-    st.write(ss)
+    st.session_state.api_key = mykey    
     expand = st.expander("� 不知道什么是API Key")
     expand.write('''
     1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟ChatGPT进行交互。\n
@@ -202,7 +200,7 @@ def story():
     params['char'] = st.text_input(tips[lang]['char'])
     params['la'] = st.text_input(tips[lang]['la'])
     params['end'] = st.text_input(tips[lang]['end'])
-    params['temp'] = st.select_slider("剧情",0,1,0.6)
+    #params['temp'] = st.select_slider("剧情",0,1,0.6)
 
     st.button(tips[lang]['btn'],on_click=get_story)
 
