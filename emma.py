@@ -22,8 +22,29 @@ class MultiApp:
 def get_key():
     st.title("Emma & ChatGPT")
     st.header("ChatGPT API Key")
-    mykey = st.text_input("请输入你的API Key",placeholder ="sk-")
-    st.session_state.api_key = mykey    
+    if "api_key" not in st.session_state:
+        ph="sk-"
+    else:
+        ph = st.session_state.api_key
+    mykey = st.text_input("请输入你的API Key",placeholder =ph)
+    if mykey:
+        st.session_state.api_key = mykey
+    st.write("---") 
+    if 'lang' not in st.session_state:
+            st.session_state.lang='中文'
+
+    langs = {'中文': "请选择语言种类:",'English': "Please select language",'日本語': "言語を選択してください", 'Français': "Veuillez sélectionner la langue",
+    'Deutsch':"Bitte wählen Sie die Sprache",'русский': "Пожалуйста, выберите язык"}
+
+    promot = st.session_state.lang
+    st.subheader(langs[promot])
+    
+    lang = st.selectbox('↓↓↓↓', langs.keys(), index = 0,label_visibility='collapsed' )
+    st.session_state.lang=lang
+    if st.button("OK"):
+        st.session_state.lang=lang
+    
+    st.write("---") 
     expand = st.expander("� 不知道什么是API Key")
     expand.write('''
     1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟ChatGPT进行交互。\n
@@ -95,14 +116,14 @@ def people():
     st.title("Emma & ChatGPT")
     st.header("历史人物")
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
+        st.write("请先输入你的chatGPT API Key(Please input your API Key)")
         return
     else:
         openai.api_key = st.session_state.api_key
 
     message  = [{"role":"system","content":"历史学家"}]
     st.subheader("你想了解谁")
-    pname  = st.text_input("",placeholder ="在此输入姓名")
+    pname  = st.text_input("你想了解谁",placeholder ="在此输入姓名",label_visibility='collapsed')
 
     if 'click_start' not in st.session_state:
         st.session_state.click_start = False 
@@ -134,7 +155,7 @@ def emotion():
     st.title("Emma & ChatGPT")
     st.header("情绪支持")
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
+        st.write("请先输入你的chatGPT API Key(Please input your API Key)")
         return
     else:
         openai.api_key = st.session_state.api_key
@@ -161,59 +182,60 @@ def get_story():
     st.session_state.story=True
 
 def story():
-    st.title("Emma & ChatGPT")    
-    st.header("故事大王")
-    message  = [{"role":"system","content":"作家"}]
+    tips = {'中文': {'title': "欢迎来到艾玛的故事会",'length': "请输入故事长度",'type': "您想听什么类型的故事?",'char': "故事有哪些角色?",'la': "故事发生在什么地方?",
+    'end': "您想要什么样的故事结局?",'btn': "生成故事","plot":"情节离奇度",'head':"故事正文"},
+    'English': {'title': "Welcome to Emma's Story Club:",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",'char': "What are the characters in the story?",
+    'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story","plot":"The degree of plot twists and turns",'head':"Story text"},
+    '日本語': {'title': "エマの物語クラブへようこそ:",'length': "物語の長さを入力してください",'type': "どのような種類の物語を聞きたいですか？",
+    'char': "物語のキャラクターは何ですか？",'la': "物語はどこで起こりますか？",'end': "どのような物語の結末が欲しいですか？",'btn': "物語を生成する","plot":"ストーリーの奇妙さ",'head':"物語本文"},
+    'Français': {'title': "Bienvenue au club d'histoires d'Emma:",'length': "Veuillez saisir la longueur de l'histoire",'type': "Quel type d'histoire voulez-vous entendre?",'char': "Quels sont les personnages de l'histoire?",
+    'la': "Où se déroule l'histoire?",'end': "Quel genre de fin d'histoire voulez-vous?",'btn': "Générer une histoire","plot":"Le degré de bizarrerie de l'intrigue",'head':"Texte de l'histoire"},
+    'Deutsch': {'title': "Willkommen im Emma Story Club:",'length': "Bitte geben Sie die Länge der Geschichte ein",'type': "Welche Art von Geschichte möchten Sie hören?",'char': "Was sind die Charaktere in der Geschichte?",
+    'la': "Wo findet die Geschichte statt?",'end': "Welche Art von Geschichte Ende wollen Sie?",'btn': "Geschichte generieren","plot":"Handlungsführung",'head':"Geschichtstext"},
+    'русский': {'title': "Добро пожаловать в клуб историй Эммы:",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",'char': "Кто герои истории?",
+    'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю","plot":"степень непредсказуемости сюжета",'head':"Текст истории"}}
 
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
+        st.write("请先输入你的chatGPT API Key(Please input your API Key)")
         return
     else:
         openai.api_key = st.session_state.api_key
-    tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择语言种类:",'length': "请输入故事长度",'type': "您想听什么类型的故事?",'char': "故事有哪些角色?",'la': "故事发生在什么地方?",'end': "您想要什么样的故事结局?",'btn': "生成故事"},
-    'English': {'title': "Welcome to Emma's Story Club:",'lang': "Please select language",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",'char': "What are the characters in the story?",'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story"},
-    '日本語': {'title': "エマの物語クラブへようこそ:",'lang': "言語を選択してください",'length': "物語の長さを入力してください",'type': "どのような種類の物語を聞きたいですか？",'char': "物語のキャラクターは何ですか？",'la': "物語はどこで起こりますか？",'end': "どのような物語の結末が欲しいですか？",'btn': "物語を生成する"},
-    'Français': {'title': "Bienvenue au club d'histoires d'Emma:",'lang': "Veuillez sélectionner la langue",'length': "Veuillez saisir la longueur de l'histoire",'type': "Quel type d'histoire voulez-vous entendre?",'char': "Quels sont les personnages de l'histoire?",'la': "Où se déroule l'histoire?",'end': "Quel genre de fin d'histoire voulez-vous?",'btn': "Générer une histoire"},
-    'Deutsch': {'title': "Willkommen im Emma Story Club:",'lang': "Bitte wählen Sie die Sprache",'length': "Bitte geben Sie die Länge der Geschichte ein",'type': "Welche Art von Geschichte möchten Sie hören?",'char': "Was sind die Charaktere in der Geschichte?",'la': "Wo findet die Geschichte statt?",'end': "Welche Art von Geschichte Ende wollen Sie?",'btn': "Geschichte generieren"},
-    'русский': {'title': "Добро пожаловать в клуб историй Эммы:",'lang': "Пожалуйста, выберите язык",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",'char': "Кто герои истории?",'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю"}}
+    
+    lang = st.session_state.lang
+
+    st.title("Emma & ChatGPT")    
+    st.header(tips[lang]["title"])
+    message  = [{"role":"system","content":"作家"}]
 
 
     if 'story' not in st.session_state:
         st.session_state.story=False
+    story_content = st.chat_message("ai")
 
     params = {}
-    
-    if 'lang' not in st.session_state:
-        st.session_state.lang='中文'
 
-    promot = st.session_state.lang
-    st.subheader(tips[promot]['lang'])
-    
-    lang = st.selectbox('↓↓↓↓',      
-        ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
-        index = 0,label_visibility='collapsed'
-        )
-    st.session_state.lang=lang
-    
-    params['length'] = st.number_input(tips[lang]['length'],min_value=100,max_value=1000,value=500)
-    params['type'] = st.text_input(tips[lang]['type'])
-    params['char'] = st.text_input(tips[lang]['char'])
-    params['la'] = st.text_input(tips[lang]['la'])
-    params['end'] = st.text_input(tips[lang]['end'])
-    #params['temp'] = st.select_slider("剧情",0,1,0.6)
+    with st.form("storyParams"):
+        params['length'] = st.slider(tips[lang]['length'],100,1000,600,step=50)
+        params['type'] = st.text_input(tips[lang]['type'])
+        params['char'] = st.text_input(tips[lang]['char'])
+        params['la'] = st.text_input(tips[lang]['la'])
+        params['end'] = st.text_input(tips[lang]['end'])
+        params['temp'] = st.slider(tips[lang]['plot'],0.0,1.0,0.6,step=0.1)
+        submitted = st.form_submit_button(tips[lang]['btn'],on_click=get_story)
 
-    st.button(tips[lang]['btn'],on_click=get_story)
-
-    if st.session_state.story:
-        msg ="写一个故事，包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params['type'] ,params['char'],params['la'],params['end'])
-        if lang != '中文':
-            message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
-            msg = chatgpt(message,max_tokens=200,temperature=0)
-            message.pop()
-        
-        message.append({"role":"user","content":msg})
-        rtn = chatgpt(message,max_tokens=params["length"],temperature=0.6)
-        st.write(rtn)
+    if submitted:
+        if params['length'] and  params['type']  and params['char'] and params['la'] and  params['temp'] and params['end']:
+            msg ="写一个故事，包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params['type'] ,params['char'],params['la'],params['end'])
+            if lang != '中文':
+                message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
+                msg = chatgpt(message,max_tokens=200,temperature=0)
+                message.pop()
+            
+            message.append({"role":"user","content":msg})
+            rtn = chatgpt(message,max_tokens=params["length"],temperature=params['temp'])
+            story_content.text_area(":red[%s]"%(tips[lang]['head']),rtn,height =500)
+        else:
+            st.warning("Please fill all the fields")
 
     return
 
@@ -233,7 +255,7 @@ def travel():
     message  = [{"role":"system","content":"导游"}]
 
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
+        st.write("请先输入你的chatGPT API Key(Please input your API Key)")
         return
     else:
         openai.api_key = st.session_state.api_key
@@ -324,7 +346,7 @@ def career():
     message  = [{"role":"system","content":"职业规划师"}]
 
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
+        st.write("请先输入你的chatGPT API Key(Please input your API Key)")
         return
     else:
         openai.api_key = st.session_state.api_key
@@ -394,6 +416,10 @@ def set_background(png_file):
 
 st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
 #set_background("沙漠3.jpg")
+
+def chooseLang():
+
+    return
 
 app = MultiApp()
 app.add_app("使用演示",demo)
