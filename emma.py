@@ -23,6 +23,14 @@ def get_key():
     st.header("ChatGPT API Key")
     mykey = st.text_input("请输入你的API Key",placeholder ="sk-")
     st.session_state.api_key = mykey
+    expand = st.expander("� 不知道什么是API Key")
+    expand.write('''
+    1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟ChatGPT进行交互。\n
+    2. 通过不同的API Key来识别用户，以确定本次API接口调用来自哪个用户。\n
+    3. 用户需要自行到OpenAI的官网上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
+    4. 使用ChatGPT的API接口将产生费用，费用与API接口调用使用的token(字数)数量相关。\n
+    5. API Key与用户关联，相当于用户使用API接口的密码，请妥善使用和保管，切勿泄露给他人。
+    6. 按照OpenAI的使用规则，API key仅限用户自己使用，不得公开共享或与他人共用。''')
     return
 
 @st.cache_data
@@ -173,13 +181,19 @@ def story():
         st.session_state.story=False
 
     params = {}
-    #select_key = [0]
-    lang = st.selectbox(
-        '请选择语言种类(Please select language):',
-        ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
-        index = 0
-        )
+    
+    if 'lang' not in st.session_state:
+        st.session_state.lang='中文'
 
+    promot = st.session_state.lang
+    st.subheader(tips[promot]['lang'])
+    
+    lang = st.selectbox('↓↓↓↓',      
+        ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
+        index = 0,label_visibility='collapsed'
+        )
+    st.session_state.lang=lang
+    
     params['length'] = st.number_input(tips[lang]['length'],min_value=100,max_value=1000,value=500)
     params['type'] = st.text_input(tips[lang]['type'])
     params['char'] = st.text_input(tips[lang]['char'])
@@ -358,6 +372,7 @@ def demo():
     st.video(data)    
 
     return
+st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
 
 app = MultiApp()
 app.add_app("使用演示",demo)
