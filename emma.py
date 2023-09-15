@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+import base64
 
 class MultiApp:
     def __init__(self):
@@ -23,11 +24,13 @@ def get_key():
     st.header("ChatGPT API Key")
     mykey = st.text_input("请输入你的API Key",placeholder ="sk-")
     st.session_state.api_key = mykey
+    ss = st.slider("剧情",0,1,0.6)
+    st.write(ss)
     expand = st.expander("� 不知道什么是API Key")
     expand.write('''
     1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟ChatGPT进行交互。\n
     2. 通过不同的API Key来识别用户，以确定本次API接口调用来自哪个用户。\n
-    3. 用户需要自行到OpenAI的官网上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
+    3. 用户需要自行到OpenAI的官网(https://openai.com)上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
     4. 使用ChatGPT的API接口将产生费用，费用与API接口调用使用的token(字数)数量相关。\n
     5. API Key与用户关联，相当于用户使用API接口的密码，请妥善使用和保管，切勿泄露给他人。
     6. 按照OpenAI的使用规则，API key仅限用户自己使用，不得公开共享或与他人共用。''')
@@ -199,6 +202,7 @@ def story():
     params['char'] = st.text_input(tips[lang]['char'])
     params['la'] = st.text_input(tips[lang]['la'])
     params['end'] = st.text_input(tips[lang]['end'])
+    params['temp'] = st.select_slider("剧情",0,1,0.6)
 
     st.button(tips[lang]['btn'],on_click=get_story)
 
@@ -372,7 +376,26 @@ def demo():
     st.video(data)    
 
     return
+
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/png;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
 st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
+#set_background("沙漠3.jpg")
 
 app = MultiApp()
 app.add_app("使用演示",demo)
