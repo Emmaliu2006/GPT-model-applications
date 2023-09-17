@@ -417,10 +417,6 @@ def set_background(png_file):
 st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
 #set_background("沙漠3.jpg")
 
-def chooseLang():
-
-    return
-
 app = MultiApp()
 app.add_app("使用演示",demo)
 app.add_app("API Key", get_key)
