@@ -70,12 +70,12 @@ def chatgpt(message,max_tokens=100,temperature=0):
 @st.cache_data
 def get_info(pname,message,lang='中文'):
     tips={'中文':["%s是哪个国家哪个年代的人,他的生卒时间"%(pname),'简单介绍一下这个人物的生平'],
-    'english':['What country and era was %s from, and what were his birth and death dates?'%(pname),'Briefly introduce the life of this character']}
-    msg = "%s是哪个国家哪个年代的人,他的生卒时间"%(pname)
+    'English':['What country and era was %s from, and what were his birth and death dates?'%(pname),'Briefly introduce the life of this character']}
+    msg = tips[lang][0]
     message.append({"role":"user","content":msg})
     res1=chatgpt(message,max_tokens=100,temperature=0)
     message.append({"role":"assistant","content":res1})
-    msg = "简单介绍一下这个人物的生平)"
+    msg =  tips[lang][1]
     message.append({"role":"user","content":msg})
     res2=chatgpt(message,max_tokens=500,temperature=0)
     return res1,res2
@@ -84,7 +84,7 @@ def get_info(pname,message,lang='中文'):
 @st.cache_data
 def get_more(people,message,lang='中文'):
     tips={'中文':["与%s同时代的名人有哪些"%(people),"%s出现在哪些影视作品中"%(people)],
-    'english':['What are the famous figures of the same era as %s'%(people),'Which film and television works does %s appear in'%(people)]}
+    'English':['What are the famous figures of the same era as %s'%(people),'Which film and television works does %s appear in'%(people)]}
     msg = tips[lang][0]
     message.append({"role":"user","content":msg})
     res1=chatgpt(message,max_tokens=200,temperature=0)
