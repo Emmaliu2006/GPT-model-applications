@@ -153,16 +153,16 @@ def people():
             return
         rtn = get_info(pname,message,ll)
         st.write(rtn[0])
-        st.write(tips[ll]['lab1'])
+        st.subheader(tips[ll]['lab1'])
         st.write(rtn[1])
 
         st.button(tips[ll]['sub2'],on_click=more_click)
         if st.session_state.click_more:
             message.pop()
             rtn = get_more(pname,message,ll)
-            st.write(tips[ll]['lab2'])
+            st.subheader(tips[ll]['lab2'])
             st.write(rtn[0])
-            st.write(tips[ll]['lab3'])
+            st.subheader(tips[ll]['lab3'])
             st.write(rtn[1])    
     return
 
