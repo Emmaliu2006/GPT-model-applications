@@ -16,7 +16,7 @@ class MultiApp:
         title = st.sidebar.radio(
             '请选择',
             self.apps,
-            format_func=lambda title: str(title)+" :point_left:")
+            format_func=lambda title: str(title))
         self.app_dict[title]()
 
 def get_key():
@@ -465,15 +465,26 @@ st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wi
 #set_background("沙漠3.jpg")
 
 app = MultiApp()
-app.add_app("使用演示",demo)
-app.add_app("API Key", get_key)
-app.add_app("历史人物", people)
-app.add_app("情绪支持", emotion)
-app.add_app("故事大王", story)
-app.add_app("旅游推荐", travel)
-app.add_app("职业选择", career)
-app.add_app("作家推荐", writer)
-app.add_app("科学世界", science)
-app.add_app("日程规划", schedule)
+if 'lang' not in st.session_state:
+    lang = '中文'
+else:
+    lang = st.session_state.lang
+
+if lang !='中文':
+    lang = 'English'
+
+
+menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划'],
+'English':['App Demos','API Key','Historical figure','Emotional support','Storyteller','Travel recommendation','Career options','Writer recommendation','Science World','Schedule planning']}
+app.add_app(menu[lang][0],demo)
+app.add_app(menu[lang][1], get_key)
+app.add_app(menu[lang][2], people)
+app.add_app(menu[lang][3], emotion)
+app.add_app(menu[lang][4], story)
+app.add_app(menu[lang][5], travel)
+app.add_app(menu[lang][6], career)
+app.add_app(menu[lang][7], writer)
+app.add_app(menu[lang][8], science)
+app.add_app(menu[lang][9], schedule)
 
 app.run()
