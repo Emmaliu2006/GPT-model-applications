@@ -1,6 +1,8 @@
 import streamlit as st
 import openai
 import base64
+import streamlit.components.v1 as components
+
 
 class MultiApp:
     def __init__(self):
@@ -8,16 +10,37 @@ class MultiApp:
         self.app_dict = {}
 
     def add_app(self, title, func):
+        #title = title + " :point_left:"
         if title not in self.apps:
             self.apps.append(title)
             self.app_dict[title] = func
 
-    def run(self):
+    def run(self,title_size="18px",option_size='12px'):
         title = st.sidebar.radio(
             '请选择',
             self.apps,
             format_func=lambda title: str(title))
         self.app_dict[title]()
+        self.changeTitleSize(title_size)
+        self.changeOptionsize(option_size)
+
+    
+    def changeTitleSize(self,title_size='12px'):
+        ChangeWidgetFontSize("请选择",title_size)
+    
+    def changeOptionsize(self,option_size='12px'):
+        for x in self.apps:
+            ChangeWidgetFontSize(x,option_size)
+
+def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
+    htmlstr = """<script>var elements = window.parent.document.querySelectorAll('*'), i;
+                    for (i = 0; i < elements.length; ++i) { if (elements[i].innerText == |wgt_txt|) 
+                        { elements[i].style.fontSize='""" + wch_font_size + """';} } </script>  """
+
+    htmlstr = htmlstr.replace('|wgt_txt|', "'" + wgt_txt + "'")
+    components.html(f"{htmlstr}", height=0, width=0)
+    
+
 
 def get_key():
     st.title("Emma & ChatGPT")
@@ -486,5 +509,4 @@ app.add_app(menu[lang][6], career)
 app.add_app(menu[lang][7], writer)
 app.add_app(menu[lang][8], science)
 app.add_app(menu[lang][9], schedule)
-
-app.run()
+app.run('32px','24px')
