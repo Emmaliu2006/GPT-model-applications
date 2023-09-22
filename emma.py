@@ -489,7 +489,7 @@ st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wi
 
 app = MultiApp()
 if 'lang' not in st.session_state:
-    lang = '中文'
+    lang = 'English'
 else:
     lang = st.session_state.lang
 
