@@ -256,14 +256,8 @@ def story():
     if 'lang' not in st.session_state:
         st.session_state.lang='中文'
 
-    promot = st.session_state.lang
-    st.subheader(tips[promot]['lang'])
-    
-    lang = st.selectbox('↓↓↓↓',      
-        ['中文', 'English', '日本語','Français','Deutsch','русский'], #也可以用元组
-        index = 0,label_visibility='collapsed'
-        )
-    st.session_state.lang=lang
+
+    lang = st.session_state.lang
     
     
     params['length'] =  st.slider(tips[lang]['length'],min_value=300,max_value=1000,value=600)
