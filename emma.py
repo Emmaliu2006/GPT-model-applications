@@ -56,7 +56,7 @@ def get_key():
         st.session_state.api_key = mykey
     st.write("---") 
     if 'lang' not in st.session_state:
-            st.session_state.lang='中文'
+            st.session_state.lang='English'
 
     langs = {'中文': "请选择语言种类:",'English': "Please select language",'日本語': "言語を選択してください", 'Français': "Veuillez sélectionner la langue",
     'Deutsch':"Bitte wählen Sie die Sprache",'русский': "Пожалуйста, выберите язык"}
