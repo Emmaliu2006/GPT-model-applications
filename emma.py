@@ -341,8 +341,8 @@ def travel():
     tips[ll]['destination'], #也可以用元组
     index = 0,label_visibility='collapsed'
     )
-    cont ={'中文':["列举%s所有的国家"%(continent),"你要去哪个国家旅游？","国家","你要去哪个地区旅游？","地区",'btn':["选择大洲","选择国家","选择地区"]],
-    'English':['List all countries in %s'%(continent),"Which country are you traveling to?","Country","Which area are you visiting?","Area",'btn':["Select continent","Select Country","Select Area"]]}
+    cont ={'中文':["列举%s所有的国家"%(continent),"你要去哪个国家旅游？","国家","你要去哪个地区旅游？","地区",{'btn':["选择大洲","选择国家","选择地区"]}],
+    'English':['List all countries in %s'%(continent),"Which country are you traveling to?","Country","Which area are you visiting?","Area",{'btn':["Select continent","Select Country","Select Area"]}]}
     
     st.button(cont[ll]['btn'][0],on_click=choose_continent)
     if st.session_state.continent:
