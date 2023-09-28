@@ -341,17 +341,17 @@ def travel():
     tips[ll]['destination'], #也可以用元组
     index = 0,label_visibility='collapsed'
     )
-    cont ={'中文':["列举%s所有的国家"%(continent),"你要去哪个国家旅游？","国家","你要去哪个地区旅游？","地区",{'btn':["选择大洲","选择国家","选择地区"]}],
-    'English':['List all countries in %s'%(continent),"Which country are you traveling to?","Country","Which area are you visiting?","Area",{'btn':["Select continent","Select Country","Select Area"]}]}
+    cont ={'中文':["列举%s所有的国家"%(continent),"你要去哪个国家旅游？","国家","你要去哪个地区旅游？","地区",["选择大洲","选择国家","选择地区"]],
+    'English':['List all countries in %s'%(continent),"Which country are you traveling to?","Country","Which area are you visiting?","Area",["Select continent","Select Country","Select Area"]]}
     
-    st.button(cont[ll]['btn'][0],on_click=choose_continent)
+    st.button(cont[ll][5][0],on_click=choose_continent)
     if st.session_state.continent:
         message.append({"role":"user","content":cont[ll][0]})
         obj = chatgpt(message,max_tokens=500,temperature=0)
         st.write(obj)
 
         country = st.text_input(cont[ll][1],placeholder=cont[ll][2])
-        st.button(cont[ll]['btn'][1],on_click=choose_country)
+        st.button(cont[ll][5][1],on_click=choose_country)
 
         if st.session_state.country and country:
             message.pop()
@@ -360,7 +360,7 @@ def travel():
             obj = chatgpt(message,max_tokens=500,temperature=0)
             st.write(obj)
             area = st.text_input(cont[ll][3],placeholder=cont[ll][4])
-            st.button(cont[ll]['btn'][0],on_click=choose_area)
+            st.button(cont[ll][5][2],on_click=choose_area)
             
             ca={'中文':["列举%s%s有名的名胜古迹"%(country,area),"列举%s%s有名的自然风光"%(country,area),"列举%s%s有名的经典美食"%(country,area),
             "介绍%s%s的交通状况"%(country,area),['名胜古迹','自然风光','经典美食','交通状况']],
