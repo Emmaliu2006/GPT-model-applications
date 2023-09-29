@@ -7,7 +7,7 @@
   </a>
   <!-- WebServer -->
   <a href="http://emma–gpt.streamlit.app">
-    <img src="https://img.shields.io/badge/Webserver-v0.1.0-8A2BE2.svg?logo=semanticweb"/>
+    <img src="https://img.shields.io/badge/Webserver-v1.27.0-8A2BE2.svg?logo=semanticweb"/>
   </a>
 </p>
 
@@ -16,6 +16,11 @@ If you like this project please let us know by starring it!
 
 ## 📄 Web server usage 
 [Web server address](http://emma–gpt.streamlit.app) 
+
+## Dev Dairy
+📘 03/02/2023: XXX is online
+📘 
+📘 XXX & XXX functions are coming
 
 ## Contributor
 Please feel free to contact me by: Emma Liu 
