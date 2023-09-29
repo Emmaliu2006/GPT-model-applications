@@ -18,8 +18,10 @@ If you like this project please let us know by starring it!
 [Web server address](http://emma–gpt.streamlit.app) 
 
 ## Dev Dairy
-📘 03/02/2023: XXX is online
-📘 
+📘 03/02/2023: XXX is online 
+
+📘
+
 📘 XXX & XXX functions are coming
 
 ## Contributor
