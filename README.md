@@ -10,7 +10,11 @@
     <img src="https://img.shields.io/badge/Webserver-v1.27.0-8A2BE2.svg?logo=semanticweb"/>
   </a>
 </p>
-
+<p align="center">
+  <a href="https://github.com/Emmaliu2006/streamlit">
+    <img width=30% src="logo.jpeg">
+  </a>
+</p>
 Welcome to StreamLit! This is an app designed to generate your personalized stories using GPT-4 and OpenAI API as backends. 
 If you like this project please let us know by starring it!
 
