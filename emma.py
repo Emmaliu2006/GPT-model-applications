@@ -496,6 +496,8 @@ def writer():
         return
     else:
         openai.api_key = st.session_state.api_key
+
+    st.subheader("will coming soon!")
     return
 
 def science():
@@ -513,6 +515,8 @@ def science():
         return
     else:
         openai.api_key = st.session_state.api_key
+    
+    st.subheader("will coming soon!")
     return
 
 def schedule():
@@ -531,6 +535,8 @@ def schedule():
         return
     else:
         openai.api_key = st.session_state.api_key
+    
+    st.subheader("will coming soon!")
     return
 
 def demo():
