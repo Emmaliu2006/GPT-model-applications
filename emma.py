@@ -503,7 +503,7 @@ def writer():
         message  = [{"role":"system","content":'encyclopedia'}]
         message.append({"role":"user","content":ques})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
-        st.text_area=res
+        st.write(res)
     return
 
 def science():
@@ -527,7 +527,7 @@ def science():
         message  = [{"role":"system","content":'encyclopedia'}]
         message.append({"role":"user","content":ques})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
-        st.text_area=res
+        st.write(res)
     return
 
 def schedule():
@@ -552,7 +552,7 @@ def schedule():
         message  = [{"role":"system","content":'encyclopedia'}]
         message.append({"role":"user","content":ques})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
-        st.text_area=res
+        st.write(res)
     return
 
 def demo():
