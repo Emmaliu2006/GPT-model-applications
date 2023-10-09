@@ -497,7 +497,13 @@ def writer():
     else:
         openai.api_key = st.session_state.api_key
 
-    st.subheader("Will coming soon!")
+    #st.subheader("Will coming soon!")
+    ques = st.text_input("What do you want to know?",placeholder="Anythings")
+    if ques:
+        message  = [{"role":"system","content":'encyclopedia'}]
+        message.append({"role":"user","content":ques})
+        res = chatgpt(message,max_tokens=800,temperature=0.5)
+        st.text_area=res
     return
 
 def science():
@@ -516,7 +522,12 @@ def science():
     else:
         openai.api_key = st.session_state.api_key
     
-    st.subheader("Will coming soon!")
+    ques = st.text_input("What do you want to know?",placeholder="Anythings")
+    if ques:
+        message  = [{"role":"system","content":'encyclopedia'}]
+        message.append({"role":"user","content":ques})
+        res = chatgpt(message,max_tokens=800,temperature=0.5)
+        st.text_area=res
     return
 
 def schedule():
@@ -536,7 +547,12 @@ def schedule():
     else:
         openai.api_key = st.session_state.api_key
     
-    st.subheader("Will coming soon!")
+    ques = st.text_input("What do you want to know?",placeholder="Anythings")
+    if ques:
+        message  = [{"role":"system","content":'encyclopedia'}]
+        message.append({"role":"user","content":ques})
+        res = chatgpt(message,max_tokens=800,temperature=0.5)
+        st.text_area=res
     return
 
 def demo():
