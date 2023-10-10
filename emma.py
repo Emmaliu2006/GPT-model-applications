@@ -565,14 +565,12 @@ def science():
         message.append({"role":"user","content":"Explain this matter from a scientific perspective:%s"%(ques)})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
-
-    st.button("Know More",on_click=science_more)
-
-    if st.session_state.science_more and res:
-        message.append({"role":"assistant","content":res})
-        message.append({"role":"user","content":"What other examples of this scientific principle exist"})
-        res = chatgpt(message,max_tokens=800,temperature=0.5)
-        st.write(res)
+        st.button("Know More",on_click=science_more)
+        if st.session_state.science_more and res:
+            message.append({"role":"assistant","content":res})
+            message.append({"role":"user","content":"What other examples of this scientific principle exist"})
+            res2 = chatgpt(message,max_tokens=800,temperature=0.5)
+            st.write(res2)
 
     return
 
