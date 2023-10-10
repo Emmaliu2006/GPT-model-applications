@@ -595,7 +595,7 @@ def schedule():
     else:
         openai.api_key = st.session_state.api_key
     
-    nums =  st.slider("Number of things to do today",min_value=1,max_value=8,value=3,step=1)
+    nums =  st.slider("Number of matters to do today",min_value=1,max_value=8,value=3,step=1)
     things = []
     if nums:
         with st.form("Things"):
