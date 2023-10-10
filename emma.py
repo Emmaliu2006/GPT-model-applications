@@ -480,6 +480,13 @@ def career():
         
     return
 
+def writer_ok():
+    st.session_state.writer_ok =  True
+
+def writer_other():
+     st.session_state.writer_other =True
+
+
 def writer():
     st.title("Emma & ChatGPT")    
 
@@ -497,14 +504,35 @@ def writer():
     else:
         openai.api_key = st.session_state.api_key
 
-    #st.subheader("Will coming soon!")
-    ques = st.text_input("What do you want to know?",placeholder="Anythings")
-    if ques:
-        message  = [{"role":"system","content":'encyclopedia'}]
-        message.append({"role":"user","content":ques})
+    if 'writer_ok' not in st.session_state:
+            st.session_state.writer_ok=False
+
+    if 'writer_other' not in st.session_state:
+        st.session_state.writer_other=False
+
+    nsize = st.radio("Please select size:",["Short story","Novella","Novel"])
+    nselect = st.selectbox("Please select type:",["Romance","Fantasy","Humor","History Fiction","Horror","Classic","Adventure","Mystery","Science Fiction","Realistic","Crime","Any"])
+    ntype = st.text_input("Your select or Input",value=nselect)
+    msg = "Please recommend an author who is adept at writing %s %s"%(nsize,ntype)
+    st.button("OK",on_click=writer_ok)
+    if st.session_state.writer_ok and msg:
+        message  = [{"role":"system","content":'A literary critic'}]
+        message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
+        st.button("Another One",on_click=writer_other)
+        if st.session_state.writer_other:
+            message.append({"role":"assistant","content":res})
+            message.append({"role":"user","content":"recommend another one"})
+            res = chatgpt(message,max_tokens=800,temperature=0.5)
+            st.write(res)
     return
+
+def science_explain():
+    st.session_state.explain =  True
+
+def science_more():
+     st.session_state.science_more =True
 
 def science():
     st.title("Emma & ChatGPT")    
@@ -521,14 +549,34 @@ def science():
         return
     else:
         openai.api_key = st.session_state.api_key
-    
-    ques = st.text_input("What do you want to know?",placeholder="Anythings")
-    if ques:
-        message  = [{"role":"system","content":'encyclopedia'}]
-        message.append({"role":"user","content":ques})
+
+       
+    if 'explain' not in st.session_state:
+        st.session_state.explain=False
+
+    if 'science_more' not in st.session_state:
+        st.session_state.science_more=False
+
+    message  = [{"role":"system","content":'Scientists'}]
+    res = ""
+    ques = st.text_input("You want to know the science behind what?",placeholder="What,Where,When")
+    st.button("Why?",on_click=science_explain)
+    if st.session_state.explain and ques:
+        message.append({"role":"user","content":"Explain this matter from a scientific perspective:%s"%(ques)})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
+
+    st.button("Know More",on_click=science_more)
+
+    if st.session_state.science_more and res:
+        message.append({"role":"assistant","content":res})
+        message.append({"role":"user","content":"What other examples of this scientific principle exist"})
+        res = chatgpt(message,max_tokens=800,temperature=0.5)
+        st.write(res)
+
     return
+
+
 
 def schedule():
     st.title("Emma & ChatGPT")    
@@ -547,12 +595,17 @@ def schedule():
     else:
         openai.api_key = st.session_state.api_key
     
-    ques = st.text_input("What do you want to know?",placeholder="Anythings")
-    if ques:
-        message  = [{"role":"system","content":'encyclopedia'}]
-        message.append({"role":"user","content":ques})
-        res = chatgpt(message,max_tokens=800,temperature=0.5)
-        st.write(res)
+    nums =  st.slider("Number of things to do today",min_value=1,max_value=8,value=3,step=1)
+    things = []
+    if nums:
+        with st.form("Things"):
+            for i in range(nums):
+                things.append(st.text_input("%d:"%(i+1),placeholder="input any things")) 
+            if st.form_submit_button("Start Plan"):
+                message  = [{"role":"system","content":'Schedule Planner'}]
+                message.append({"role":"user","content":"Please plan a schedule for the following matters:%s"%(','.join(things))})
+                res = chatgpt(message,max_tokens=800,temperature=0.5)
+                st.write(res)
     return
 
 def demo():
