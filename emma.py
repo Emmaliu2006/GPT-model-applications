@@ -41,7 +41,7 @@ def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
 
 def get_key():
     st.title("Emma & GPT")
-    st.header("ChatGPT API Key")
+    st.header("GPT API Key")
     
     if "api_key" not in st.session_state:
         ph="sk-"
@@ -69,9 +69,9 @@ def get_key():
     st.write("---") 
     expand = st.expander("� 不知道什么是API Key")
     expand.write('''
-    1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟ChatGPT进行交互。\n
+    1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟GPT进行交互。\n
     2. 通过不同的API Key来识别用户，以确定本次API接口调用来自哪个用户。\n
-    3. 用户需要自行到OpenAI的官网(https://openai.com)上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
+    3. 用户需要自行到OpenAI的官网(https://openai.com) 上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
     4. 使用ChatGPT的API接口将产生费用，费用与API接口调用使用的token(字数)数量相关。\n
     5. API Key与用户关联，相当于用户使用API接口的密码，请妥善使用和保管，切勿泄露给他人。
     6. 按照OpenAI的使用规则，API key仅限用户自己使用，不得公开共享或与他人共用。''')
@@ -567,6 +567,32 @@ def schedule():
                 st.write(res)
     return
 
+def feeltalk_ok():
+    st.session_state.feeltalk_ok =True
+
+def feeltalk():
+    st.title("Emma & GPT")    
+    
+    tips = {'中文':{'head':'自问自答:sparkling_heart:'},'English':{'head':'Feeltalk:sparkling_heart:'}}
+    if st.session_state.lang !='中文':
+        ll = 'English'
+    else:
+        ll = '中文'
+    
+    st.header(tips[ll]['head'])
+    
+    if 'feeltalk_ok' not in st.session_state:
+        st.session_state.feeltalk_ok=False
+
+    msg = st.text_input("What do you want to know:",placeholder="Anything")
+    st.button("OK",on_click=feeltalk_ok)
+    if st.session_state.feeltalk_ok and msg:
+        message  = [{"role":"system","content":'Jack of all trades'}]
+        message.append({"role":"user","content":msg})
+        res = chatgpt(message,max_tokens=800,temperature=0.5)
+        st.write(res)
+    return
+
 def demo():
     st.title("Emma & GPT")    
 
@@ -615,8 +641,8 @@ if lang !='中文':
     lang = 'English'
 
 
-menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划'],
-'English':['App Demos','API Key','Historical figure','Emotional support','Storyteller','Travel recommendation','Career options','Writer recommendation','Science World','Schedule planning']}
+menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划','自问自答'],
+'English':['App Demos','API Key','Historical figure','Emotional support','Storyteller','Travel recommendation','Career options','Writer recommendation','Science World','Schedule planning','Feeltalk']}
 app.add_app(menu[lang][0], demo)
 app.add_app(menu[lang][1], get_key)
 app.add_app(menu[lang][2], people)
@@ -627,4 +653,5 @@ app.add_app(menu[lang][6], career)
 app.add_app(menu[lang][7], writer)
 app.add_app(menu[lang][8], science)
 app.add_app(menu[lang][9], schedule)
+app.add_app(menu[lang][10], feeltalk)
 app.run('32px','24px')
