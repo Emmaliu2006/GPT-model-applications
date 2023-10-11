@@ -79,6 +79,12 @@ def get_key():
 
 @st.cache_data
 def chatgpt(message,max_tokens=100,temperature=0):
+    if 'api_key' not in st.session_state or not st.session_state.api_key:
+        st.warning("请先输入你的chatGPT API Key")
+        return "Failed"
+    else:
+        openai.api_key = st.session_state.api_key
+
     rsp = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=message,
@@ -147,11 +153,6 @@ def people():
     'English':{'head':'Historical figure:sparkling_heart:','char':'historian','quest':'Who do you want to know?','placeholder':'Ener the name here','sub1':'Start','err':'Please enter the name of the person first',
     'sub2':'Know more','lab1':'Brief introduction','lab2':'Contemporary celebrities','lab3':'Related film and television works'}}
     st.title("Emma & ChatGPT")
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
 
     if st.session_state.lang !='中文':
         ll = 'English'
@@ -202,11 +203,6 @@ def emotion():
     else:
         ll = '中文'
     st.header(tips[ll]['head'])
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
 
     ques = st.text_input(tips[ll]['q1'],placeholder=tips[ll]['p1'])
     state = st.text_input(tips[ll]['q2'],placeholder=tips[ll]['p2'])
@@ -233,12 +229,6 @@ def story():
     st.title("Emma & ChatGPT")    
     
     message  = [{"role":"system","content":"作家"}]
-
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
 
     tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择语言种类:",'length': "请输入故事长度",'type': "您想听什么类型的故事?",
     'char': "故事有哪些角色?",'la': "故事发生在什么地方?",'end': "您想要什么样的故事结局?",'btn': "生成故事",'plot':"情节离奇程度"},
@@ -288,6 +278,8 @@ def story():
         if lang != '中文':
             message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
             msg = chatgpt(message,max_tokens=200,temperature=0)
+            if msg == "Failed":
+                return
             message.pop()
         
         message.append({"role":"user","content":msg})
@@ -319,12 +311,6 @@ def travel():
     
     st.header(tips[ll]['head'])
     message  = [{"role":"system","content":tips[ll]['char']}]
-
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
 
     if 'continent' not in st.session_state:
         st.session_state.continent=False
@@ -432,12 +418,6 @@ def career():
 
     message  = [{"role":"system","content":tips[ll]['char']}]
 
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
-
     interest = st.text_input(tips[ll]['form'][0],placeholder=tips[ll]['ph'][0])        
     skill = st.text_input(tips[ll]['form'][1],placeholder=tips[ll]['ph'][1])
     values = st.text_input(tips[ll]['form'][2],placeholder=tips[ll]['ph'][2])
@@ -498,12 +478,6 @@ def writer():
     
     st.header(tips[ll]['head'])
 
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
-
     if 'writer_ok' not in st.session_state:
             st.session_state.writer_ok=False
 
@@ -543,14 +517,7 @@ def science():
         ll = '中文'
     
     st.header(tips[ll]['head'])
-    
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
-
-       
+        
     if 'explain' not in st.session_state:
         st.session_state.explain=False
 
@@ -586,12 +553,6 @@ def schedule():
         ll = '中文'
     
     st.header(tips[ll]['head'])
-
-    if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.write("请先输入你的chatGPT API Key")
-        return
-    else:
-        openai.api_key = st.session_state.api_key
     
     nums =  st.slider("Number of matters to do today",min_value=1,max_value=8,value=3,step=1)
     things = []
