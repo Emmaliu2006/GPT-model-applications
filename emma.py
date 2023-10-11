@@ -150,7 +150,7 @@ def story():
 def people():
 
     tips ={'中文':{'head':'历史人物:sparkling_heart:','char':'历史学家','quest':'你想了解谁?','placeholder':'在此输入姓名','sub1':'开始吧','err':'请首先输入人物姓名','sub2':'了解更多','lab1':'生平简介','lab2':'同时代名人','lab3':'相关影视作品'},
-    'English':{'head':'Historical figure:sparkling_heart:','char':'historian','quest':'Who do you want to know?','placeholder':'Ener the name here','sub1':'Start','err':'Please enter the name of the person first',
+    'English':{'head':'Historical Figure:sparkling_heart:','char':'historian','quest':'Who do you want to know?','placeholder':'Ener the name here','sub1':'Start','err':'Please enter the name of the person first',
     'sub2':'Know more','lab1':'Brief introduction','lab2':'Contemporary celebrities','lab3':'Related film and television works'}}
     st.title("Emma & GPT")
 
@@ -302,7 +302,7 @@ def choose_area():
 def travel():
     st.title("Emma & GPT")    
     tips = {'中文':{'head':'旅游推荐:sparkling_heart:','char':'导游','title':'请选择目的地','destination':['南美洲', '非洲', '欧洲','亚洲','北美洲','大洋洲']},
-            'English':{'head':'Travel recommendation:sparkling_heart:','char':'guide','title':'please select a destination','destination':['South America', 'Africa', 'Europe','Asia','North America','Oceania']}
+            'English':{'head':'Travel Recommendation:sparkling_heart:','char':'guide','title':'please select a destination','destination':['South America', 'Africa', 'Europe','Asia','North America','Oceania']}
     }
     if st.session_state.lang !='中文':
         ll = 'English'
@@ -405,7 +405,7 @@ def career():
     st.title("Emma & GPT")    
     tips = {'中文':{'head':'职业选择:sparkling_heart:','char':'职业规划师','form':['兴趣爱好', '技能特长', '价值观'],
             'ph':["你喜欢将时间花在什么上面","可以是写作这样的硬实力，也可以是领导力这样的软实力","选择工作你最看重什么?兴趣、工资、地理位置..."]},
-            'English':{'head':'Career options:sparkling_heart:','char':'Career planner','form':['Hobbies','Skill specialties','Values'],
+            'English':{'head':'Career Options:sparkling_heart:','char':'Career planner','form':['Hobbies','Skill specialties','Values'],
             'ph':["What do you like to spend your time on","It can be hard power like writing or soft power like leadership",
             "What do you value most when choosing a job? Hobbies, salary, place of work..."]}
     }
@@ -470,7 +470,7 @@ def writer_other():
 def writer():
     st.title("Emma & GPT")    
 
-    tips = {'中文':{'head':'作家推荐:sparkling_heart:'},'English':{'head':'Writer recommendation:sparkling_heart:'}}
+    tips = {'中文':{'head':'作家推荐:sparkling_heart:'},'English':{'head':'Writer Recommendation:sparkling_heart:'}}
     if st.session_state.lang !='中文':
         ll = 'English'
     else:
@@ -546,7 +546,7 @@ def science():
 def schedule():
     st.title("Emma & GPT")    
     
-    tips = {'中文':{'head':'日程规划:sparkling_heart:'},'English':{'head':'Schedule planning:sparkling_heart:'}}
+    tips = {'中文':{'head':'日程规划:sparkling_heart:'},'English':{'head':'Schedule Planning:sparkling_heart:'}}
     if st.session_state.lang !='中文':
         ll = 'English'
     else:
@@ -567,13 +567,13 @@ def schedule():
                 st.write(res)
     return
 
-def feeltalk_ok():
-    st.session_state.feeltalk_ok =True
+def freetalk_ok():
+    st.session_state.freetalk_ok =True
 
-def feeltalk():
+def freetalk():
     st.title("Emma & GPT")    
     
-    tips = {'中文':{'head':'自问自答:sparkling_heart:'},'English':{'head':'Feeltalk:sparkling_heart:'}}
+    tips = {'中文':{'head':'随心问答:sparkling_heart:'},'English':{'head':'Free Talk:sparkling_heart:'}}
     if st.session_state.lang !='中文':
         ll = 'English'
     else:
@@ -581,12 +581,12 @@ def feeltalk():
     
     st.header(tips[ll]['head'])
     
-    if 'feeltalk_ok' not in st.session_state:
-        st.session_state.feeltalk_ok=False
+    if 'freetalk_ok' not in st.session_state:
+        st.session_state.freetalk_ok=False
 
     msg = st.text_input("What do you want to know:",placeholder="Anything")
-    st.button("OK",on_click=feeltalk_ok)
-    if st.session_state.feeltalk_ok and msg:
+    st.button("OK",on_click=freetalk_ok)
+    if st.session_state.freetalk_ok and msg:
         message  = [{"role":"system","content":'Jack of all trades'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -596,7 +596,7 @@ def feeltalk():
 def demo():
     st.title("Emma & GPT")    
 
-    tips = {'中文':{'head':'使用演示:sparkling_heart:'},'English':{'head':'App demo:sparkling_heart:'}}
+    tips = {'中文':{'head':'使用演示:sparkling_heart:'},'English':{'head':'App Demo:sparkling_heart:'}}
     if st.session_state.lang !='中文':
         ll = 'English'
     else:
@@ -641,8 +641,8 @@ if lang !='中文':
     lang = 'English'
 
 
-menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划','自问自答'],
-'English':['App Demos','API Key','Historical figure','Emotional support','Storyteller','Travel recommendation','Career options','Writer recommendation','Science World','Schedule planning','Feeltalk']}
+menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划','随心问答'],
+'English':['App Demos','API Key','Historical Figure','Emotional Support','Storyteller','Travel Recommendation','Career Options','Writer Recommendation','Science World','Schedule Planning','Free Talk']}
 app.add_app(menu[lang][0], demo)
 app.add_app(menu[lang][1], get_key)
 app.add_app(menu[lang][2], people)
@@ -653,5 +653,5 @@ app.add_app(menu[lang][6], career)
 app.add_app(menu[lang][7], writer)
 app.add_app(menu[lang][8], science)
 app.add_app(menu[lang][9], schedule)
-app.add_app(menu[lang][10], feeltalk)
+app.add_app(menu[lang][10], freetalk)
 app.run('32px','24px')
