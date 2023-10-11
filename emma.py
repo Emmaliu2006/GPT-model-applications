@@ -40,7 +40,7 @@ def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
         components.html(f"{htmlstr}", height=0, width=0)
 
 def get_key():
-    st.title("Emma & ChatGPT")
+    st.title("Emma & GPT")
     st.header("ChatGPT API Key")
     
     if "api_key" not in st.session_state:
@@ -152,7 +152,7 @@ def people():
     tips ={'中文':{'head':'历史人物:sparkling_heart:','char':'历史学家','quest':'你想了解谁?','placeholder':'在此输入姓名','sub1':'开始吧','err':'请首先输入人物姓名','sub2':'了解更多','lab1':'生平简介','lab2':'同时代名人','lab3':'相关影视作品'},
     'English':{'head':'Historical figure:sparkling_heart:','char':'historian','quest':'Who do you want to know?','placeholder':'Ener the name here','sub1':'Start','err':'Please enter the name of the person first',
     'sub2':'Know more','lab1':'Brief introduction','lab2':'Contemporary celebrities','lab3':'Related film and television works'}}
-    st.title("Emma & ChatGPT")
+    st.title("Emma & GPT")
 
     if st.session_state.lang !='中文':
         ll = 'English'
@@ -191,7 +191,7 @@ def people():
     return
 
 def emotion():
-    st.title("Emma & ChatGPT")
+    st.title("Emma & GPT")
     tips = {'中文':{'head':'情绪支持:sparkling_heart:','char':'心理治疗师','q1':'你遇到了什么问题','p1':'请输入问题','q2':'你当前的心情状态是','p2':'请输入心情',
     'btn':'开始分析','lab1':'请首先输入问题','lab2':'下面是一些简单建议：'},
             'English':{'head':'Emotion Support:sparkling_heart:','char':'psychotherapist','q1':'What problem did you encounter','p1':'Please enter your problem',
@@ -226,7 +226,7 @@ def get_story():
     st.session_state.story=True
 
 def story():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
     
     message  = [{"role":"system","content":"作家"}]
 
@@ -300,7 +300,7 @@ def choose_area():
 
 
 def travel():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
     tips = {'中文':{'head':'旅游推荐:sparkling_heart:','char':'导游','title':'请选择目的地','destination':['南美洲', '非洲', '欧洲','亚洲','北美洲','大洋洲']},
             'English':{'head':'Travel recommendation:sparkling_heart:','char':'guide','title':'please select a destination','destination':['South America', 'Africa', 'Europe','Asia','North America','Oceania']}
     }
@@ -402,7 +402,7 @@ def career_analyze():
     st.session_state.career3=  True
 
 def career():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
     tips = {'中文':{'head':'职业选择:sparkling_heart:','char':'职业规划师','form':['兴趣爱好', '技能特长', '价值观'],
             'ph':["你喜欢将时间花在什么上面","可以是写作这样的硬实力，也可以是领导力这样的软实力","选择工作你最看重什么?兴趣、工资、地理位置..."]},
             'English':{'head':'Career options:sparkling_heart:','char':'Career planner','form':['Hobbies','Skill specialties','Values'],
@@ -468,7 +468,7 @@ def writer_other():
 
 
 def writer():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
 
     tips = {'中文':{'head':'作家推荐:sparkling_heart:'},'English':{'head':'Writer recommendation:sparkling_heart:'}}
     if st.session_state.lang !='中文':
@@ -509,7 +509,7 @@ def science_more():
      st.session_state.science_more =True
 
 def science():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
     tips = {'中文':{'head':'科学世界:sparkling_heart:'},'English':{'head':'Science World:sparkling_heart:'}}
     if st.session_state.lang !='中文':
         ll = 'English'
@@ -544,7 +544,7 @@ def science():
 
 
 def schedule():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
     
     tips = {'中文':{'head':'日程规划:sparkling_heart:'},'English':{'head':'Schedule planning:sparkling_heart:'}}
     if st.session_state.lang !='中文':
@@ -568,7 +568,7 @@ def schedule():
     return
 
 def demo():
-    st.title("Emma & ChatGPT")    
+    st.title("Emma & GPT")    
 
     tips = {'中文':{'head':'使用演示:sparkling_heart:'},'English':{'head':'App demo:sparkling_heart:'}}
     if st.session_state.lang !='中文':
@@ -601,7 +601,7 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.set_page_config(page_title="Emma & ChatGpt",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
+st.set_page_config(page_title="Emma & GPT",page_icon=":rainbow:", layout="wide",initial_sidebar_state="auto")
 
 app = MultiApp()
 
