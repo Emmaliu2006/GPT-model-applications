@@ -42,21 +42,73 @@ def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
 def get_key():
     st.title("Emma & GPT")
     st.header("GPT API Key")
+    langs = {'中文': "请选择语言种类:",'English': "Please select language",'日本語': "言語を選択してください", 'Français': "Veuillez sélectionner la langue",
+    'Deutsch':"Bitte wählen Sie die Sprache",'русский': "Пожалуйста, выберите язык"}
+
+    helps ={'中文': '''
+    1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟GPT进行交互。
+    2. 通过不同的API Key来识别用户，以确定本次API接口调用来自哪个用户。
+    3. 用户需要自行到OpenAI的官网(https://openai.com) 上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。
+    4. 使用ChatGPT的API接口将产生费用，费用与API接口调用使用的token(字数)数量相关。
+    5. API Key与用户关联，相当于用户使用API接口的密码，请妥善使用和保管，切勿泄露给他人。
+    6. 按照OpenAI的使用规则，API key仅限用户自己使用，不得公开共享或与他人共用。''',
+    'English':'''
+    1. OpenAI provides API interfaces for users, who can call these interfaces in their own or third-party programs to interact with GPT. 
+    2. Identify users through different API keys to determine which user this API interface call comes from. 
+    3. Users need to go to OpenAI's official website on their own（ https://openai.com ）Apply for one's own API Key on, a user can apply for multiple API Keys and destroy them at any time. 
+    4. Using the ChatGPT API interface will incur costs, which are related to the number of tokens (words) used for API interface calls. 
+    5. The API Key is associated with the user, which is equivalent to the user's password for using the API interface. Please use and keep it properly and do not disclose it to others.
+    6. According to the usage rules of OpenAI, API keys are only for users to use and cannot be shared publicly or with others.''',
+    '日本語': '''
+    1. OpenAIはユーザーにAPIインタフェースを提供し、ユーザーは自分または第三者のプログラムの中でこれらのインタフェースを呼び出してGPTと対話することができる。
+    2. 今回のAPIインタフェース呼び出しがどのユーザから来たのかを決定するために、異なるAPI Keyを介してユーザを識別する。
+    3. ユーザーはOpenAIの公式サイト（https://openai.com）で独自のAPI Keyを申請し、1人のユーザーが複数のAPI Keyを申請することができ、いつでも破棄することができます。
+    4. ChatGPTを使用するAPIインタフェースは、APIインタフェース呼び出しに使用されるtoken（文字数）の数に関連する費用を発生する。
+    5. API Keyはユーザーと関連しており、ユーザーがAPIインタフェースを使用するパスワードに相当します。適切に使用し、保管してください。決して他人に漏らさないでください。
+    6. OpenAIの使用規則に従って、API keyはユーザー自身が使用する限り、公開共有したり他人と共有したりしてはならない。''',
+    'Français':'''
+    1. Openai fournit aux utilisateurs des interfaces API qu'ils peuvent appeler pour interagir avec GPT dans leurs propres programmes ou dans des programmes tiers.
+    2. Identifiez l'utilisateur via différentes clés d'api pour déterminer de quel utilisateur provient cet appel d'interface d'api.
+    3. Les utilisateurs doivent se rendre sur le site officiel d'openai ( https://openai.com ), en appliquant sa propre clé API, un utilisateur peut appliquer plusieurs clés API et peut les détruire à tout moment.
+    4. L'utilisation de l'interface API de chatgpt entraînera des frais liés au nombre de tokens (mots) utilisés par les appels d'interface API.
+    5. API Key est associé à l'utilisateur, l'équivalent de l'utilisateur utilise le mot de passe de l'interface API, s'il vous plaît utiliser et conserver correctement, ne jamais divulguer à d'autres.
+    6. Conformément aux règles d'utilisation d'openai, la clé d'API est réservée à l'utilisateur lui - même et ne peut être partagée publiquement ou avec d'autres utilisateurs.''',
+    'Deutsch':'''
+    1. OpenAI stellt API-Schnittstellen für Benutzer bereit, die diese Schnittstellen in ihren eigenen oder Drittanbieterprogrammen aufrufen können, um mit GPT zu interagieren.
+    2. Identifizieren Sie Benutzer über verschiedene API-Schlüssel, um festzustellen, von welchem Benutzer dieser API-Schnittstellenaufruf stammt.
+    3. Benutzer müssen auf eigene Faust auf die offizielle Website von OpenAI gehen( https://openai.com Um einen eigenen API-Schlüssel zu beantragen, kann ein Benutzer mehrere API-Schlüssel beantragen und diese jederzeit zerstören.
+    4. Die Verwendung der ChatGPT API Schnittstelle verursacht Kosten, die sich auf die Anzahl der Token (Wörter) beziehen, die für API Interface Aufrufe verwendet werden.
+    5. Der API-Schlüssel ist dem Benutzer zugeordnet, was dem Passwort des Benutzers für die Nutzung der API-Schnittstelle entspricht. Bitte verwenden und aufbewahren Sie ihn ordnungsgemäß und geben Sie ihn nicht an Dritte weiter.
+    6. Gemäß den Nutzungsregeln von OpenAI sind API-Schlüssel nur für Benutzer zu verwenden und können nicht öffentlich oder mit anderen geteilt werden.''',
+    'русский':'''
+    1. OpenAI предоставляет пользователям интерфейсы API, которые пользователи могут использовать для взаимодействия с GPT в своих собственных или сторонних программах.
+    2. Идентифицируйте пользователя с помощью различных API - ключей, чтобы определить, от кого исходит этот вызов интерфейса API.
+    3. Пользователи должны сами зайти на официальный сайт OpenAI ( https://openai.com При подаче заявки на собственный API Key один пользователь может подать заявку на несколько API Key и может быть уничтожен в любое время.
+    4. Использование интерфейса API ChatGPT влечет за собой расходы, связанные с количеством токенов (слов), используемых для вызова интерфейса API.
+    5. API Key ассоциируется с пользователем, что эквивалентно паролю, который пользователь использует с интерфейсом API, используйте и храните его должным образом и не разглашайте другим.
+    6. Согласно правилам использования OpenAI, ключ API доступен только пользователям и не подлежит публичному обмену или совместному использованию с другими пользователями.'''}
     
+    tips={'中文': "请输入你的API Key:",'English': "Please enter your API Key",'日本語': "あなたのAPI Keyを入力してください", 'Français': "Veuillez entrer votre clé API",
+    'Deutsch':"Bitte geben Sie Ihren API Key ein",'русский': "Введите API Key"}
+
+    tips2={'中文': "请输入你的API Key:",'English': "I don't know what API Key is",'日本語': "API Keyとは何かわからない", 'Français': "Je ne sais pas ce qu'est une clé API",
+    'Deutsch':"Ich weiß nicht, was API Key ist",'русский': "Что такое API Key"}
+
+
+    if 'lang' not in st.session_state:
+            st.session_state.lang='中文'
+    
+    lang = st.session_state.lang
+
     if "api_key" not in st.session_state:
         ph="sk-"
     else:
         ph = st.session_state.api_key
     
-    mykey = st.text_input("请输入你的API Key",placeholder =ph)
+    mykey = st.text_input(tips[lang],placeholder =ph)
     if mykey:
         st.session_state.api_key = mykey
     st.write("---") 
-    if 'lang' not in st.session_state:
-            st.session_state.lang='中文'
-
-    langs = {'中文': "请选择语言种类:",'English': "Please select language",'日本語': "言語を選択してください", 'Français': "Veuillez sélectionner la langue",
-    'Deutsch':"Bitte wählen Sie die Sprache",'русский': "Пожалуйста, выберите язык"}
 
     prompt = st.session_state.lang
     st.subheader(langs[prompt])
@@ -67,20 +119,14 @@ def get_key():
         st.session_state.lang=lang
     
     st.write("---") 
-    expand = st.expander("� 不知道什么是API Key")
-    expand.write('''
-    1. OpenAI给用户提供API接口，用户可以在自己或者第三方程序中调用这些接口跟GPT进行交互。\n
-    2. 通过不同的API Key来识别用户，以确定本次API接口调用来自哪个用户。\n
-    3. 用户需要自行到OpenAI的官网(https://openai.com) 上申请自己的API Key，一个用户可以申请多个API Key，并可以随时销毁。\n
-    4. 使用ChatGPT的API接口将产生费用，费用与API接口调用使用的token(字数)数量相关。\n
-    5. API Key与用户关联，相当于用户使用API接口的密码，请妥善使用和保管，切勿泄露给他人。
-    6. 按照OpenAI的使用规则，API key仅限用户自己使用，不得公开共享或与他人共用。''')
+    expand = st.expander("� %s"%(tips2[lang]))
+    expand.write(helps[lang])
     return
 
 @st.cache_data
 def chatgpt(message,max_tokens=100,temperature=0):
     if 'api_key' not in st.session_state or not st.session_state.api_key:
-        st.warning("请先输入你的chatGPT API Key")
+        st.warning("请先输入你的API Key(Please enter your API Key first)")
         return "Failed"
     else:
         openai.api_key = st.session_state.api_key
@@ -274,7 +320,7 @@ def story():
     st.button(tips[lang]['btn'],on_click=get_story)
 
     if st.session_state.story:
-        msg ="写一个故事，包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params['type'] ,params['char'],params['la'],params['end'])
+        msg ="写一个故事，不超过%s个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
         if lang != '中文':
             message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
             msg = chatgpt(message,max_tokens=200,temperature=0)
@@ -283,7 +329,7 @@ def story():
             message.pop()
         
         message.append({"role":"user","content":msg})
-        rtn = chatgpt(message,max_tokens=params["length"],temperature=0.6)
+        rtn = chatgpt(message,max_tokens=params["length"]*2,temperature=0.6)
         #st.write(rtn)
         st.session_state.cont = rtn
 
@@ -637,14 +683,18 @@ if 'lang' not in st.session_state:
 else:
     lang = st.session_state.lang
 
-if lang !='中文':
-    lang = 'English'
-
+# if lang !='中文':
+#     lang = 'English'
 
 menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事大王','旅游推荐','职业选择','作家推荐','科学世界','日程规划','随心问答'],
-'English':['App Demos','API Key','Historical Figure','Emotional Support','Storyteller','Travel Recommendation','Career Options','Writer Recommendation','Science World','Schedule Planning','Free Talk']}
-app.add_app(menu[lang][0], demo)
+'English':['App Demos','API Key','Historical Figure','Emotional Support','Storyteller','Travel Recommendation','Career Options','Writer Recommendation','Science World','Schedule Planning','Free Talk'],
+'日本語':['プレゼンテーションの適用','API Key','歴史上の人物','情緒的支持','物語を語る人','旅行のおすすめ','職業選択','推薦作家','科学の世界','スケジュール計画','自由に話す'],
+'Français':["Démonstration d'application",'API Key','Personnages historiques','Soutien émotionnel','Les gens qui racontent des histoires','Recommandations touristiques',
+'Choix de carrière','Auteurs recommandés','Le monde scientifique','Planification du calendrier','Parler librement'],
+'Deutsch':['Anwendungsdemonstration','API Key','Historische Figur','Emotionale Unterstützung','Geschichtenerzähler','Reiseempfehlungen','Berufswahl','Empfohlener Autor','Die wissenschaftliche Welt','Zeitplanung','Freies Gespräch'],
+'русский':['Демонстрация приложений','API Key','Исторические личности','Эмоциональная поддержка','Рассказчик.','Туристические рекомендации','Выбор профессии','Рекомендуем писателей','Научный мир','График','Свободный разговор']}
 app.add_app(menu[lang][1], get_key)
+app.add_app(menu[lang][0], demo)
 app.add_app(menu[lang][2], people)
 app.add_app(menu[lang][3], emotion)
 app.add_app(menu[lang][4], story)
