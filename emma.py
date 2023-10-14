@@ -277,7 +277,7 @@ def story():
     tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择语言种类:",'length': "请输入故事长度",'type': "您想听什么类型的故事?",
     'char': "故事有哪些角色?",'la': "故事发生在什么地方?",'end': "您想要什么样的故事结局?",'btn': "生成故事",'plot':"情节离奇程度"},
     'English': {'title': "Welcome to Emma's Story Club:",'lang': "Please select language",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",
-    'char': "What are the characters in the story?",'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story",'plot':"he degree of plot strangeness"},
+    'char': "What are the characters in the story?",'la': "Where does the story take place?",'end': "What kind of story ending do you want?",'btn': "Generate story",'plot':"The degree of plot strangeness"},
     '日本語': {'title': "エマの物語クラブへようこそ:",'lang': "言語を選択してください",'length': "物語の長さを入力してください",'type': "どのような種類の物語を聞きたいですか？",
     'char': "物語のキャラクターは何ですか？",'la': "物語はどこで起こりますか？",'end': "どのような物語の結末が欲しいですか？",'btn': "物語を生成する",'plot':"プロットの奇妙さの程度"},
     'Français': {'title': "Bienvenue au club d'histoires d'Emma:",'lang': "Veuillez sélectionner la langue",'length': "Veuillez saisir la longueur de l'histoire",'type': "Quel type d'histoire voulez-vous entendre?",
@@ -322,11 +322,11 @@ def story():
         msg ="写一个故事，不超过%s个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
         if lang != '中文':
             message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
-            msg = chatgpt(message,max_tokens=200,temperature=0)
+            msg = chatgpt(message,max_tokens=500,temperature=0)
             if msg == "Failed":
                 return
             message.pop()
-        
+        st.write(msg)
         message.append({"role":"user","content":msg})
         rtn = chatgpt(message,max_tokens=2000,temperature=0.6)
         st.write(rtn)
