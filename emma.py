@@ -319,13 +319,13 @@ def story():
 
     if st.session_state.story:
         st.session_state.story=False
-        msg ="写一个故事，不超过{}个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
-        if lang != '中文':
-            message.append({"role":"user","content":"请把下面这句话:{},翻译成{}".format(msg,lang)})
-            msg = chatgpt(message,max_tokens=500,temperature=0)
-            if msg == "Failed":
-                return
-            message.pop()
+        msg ="写一个{}故事，不超过{}个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(lang,params["length"],params['type'] ,params['char'],params['la'],params['end'])
+        # if lang != '中文':
+        #     message.append({"role":"user","content":"请把下面这句话:{},翻译成{}".format(msg,lang)})
+        #     msg = chatgpt(message,max_tokens=500,temperature=0)
+        #     if msg == "Failed":
+        #         return
+        #     message.pop()
         
         message.append({"role":"user","content":msg})
         rtn = chatgpt(message,max_tokens=2000,temperature=0.6)
