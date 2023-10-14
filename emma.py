@@ -321,7 +321,7 @@ def story():
         st.session_state.story=False
         msg ="写一个故事，不超过%s个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
         if lang != '中文':
-            message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
+            message.append({"role":"user","content":"请把下面这句话:{},翻译成{}".format(msg,lang)})
             msg = chatgpt(message,max_tokens=500,temperature=0)
             if msg == "Failed":
                 return
