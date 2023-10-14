@@ -329,7 +329,7 @@ def story():
         #     message.pop()
         
         message.append({"role":"user","content":msg})
-        rtn = chatgpt(message,max_tokens=2000,temperature=0.6)
+        rtn = chatgpt(message,max_tokens=params['length']*2,temperature=0.6)
         st.write(rtn)
         #st.session_state.cont = rtn
 
