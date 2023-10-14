@@ -182,16 +182,10 @@ def get_emotion(ques,state,message,lang='中文'):
 
 def info_click():
     st.session_state.click_start = True
+    st.session_state.click_more = False 
 
 def more_click():
     st.session_state.click_more = True
-
-def emo_analyze():
-    st.session_state.emo_analyze = True
-
-def story():
-    st.session_state.story = True
-
 
 def people():
 
@@ -218,7 +212,6 @@ def people():
     
     st.button(tips[ll]['sub1'],on_click=info_click)
     if  st.session_state.click_start:
-        st.session_state.click_start = False 
         if not pname:
             st.write(tips[ll]["err"])
             return
@@ -229,14 +222,17 @@ def people():
 
         st.button(tips[ll]['sub2'],on_click=more_click)
         if st.session_state.click_more:
-            st.session_state.click_more = False 
             message.pop()
             rtn = get_more(pname,message,ll)
             st.subheader(tips[ll]['lab2'])
             st.write(rtn[0])
             st.subheader(tips[ll]['lab3'])
             st.write(rtn[1])    
+        
     return
+
+def emo_analyze():
+    st.session_state.emo_analyze = True
 
 def emotion():
     st.title("Emma & GPT")
@@ -340,13 +336,21 @@ def story():
 
 def choose_continent():
     st.session_state.continent=True
+    st.session_state.country=False
+    st.session_state.area=False
+    st.session_state.more_detail=False
 
 def choose_country():
     st.session_state.country=True
+    st.session_state.area=False
+    st.session_state.more_detail=False
 
 def choose_area():
     st.session_state.area=True
+    st.session_state.more_detail=False
 
+def more_detail():
+    st.session_state.more_detail=True
 
 def travel():
     st.title("Emma & GPT")    
@@ -370,6 +374,9 @@ def travel():
     if 'area' not in st.session_state:
         st.session_state.area=False
 
+    if 'more_detail' not in st.session_state:
+        st.session_state.more_detail=True
+
     st.subheader(tips[ll]['title'])
     continent = st.selectbox(
     tips[ll]['title'],
@@ -381,7 +388,6 @@ def travel():
     
     st.button(cont[ll][5][0],on_click=choose_continent)
     if st.session_state.continent:
-        st.session_state.continent=False
         message.append({"role":"user","content":cont[ll][0]})
         obj = chatgpt(message,max_tokens=500,temperature=0)
         st.write(obj)
@@ -390,7 +396,6 @@ def travel():
         st.button(cont[ll][5][1],on_click=choose_country)
 
         if st.session_state.country and country:
-            st.session_state.country=False
             message.pop()
             ct={'中文':"列举%s所有的省(州、邦)"%(country),'English':"List all %s provinces (states)"%(country)}
             message.append({"role":"user","content":ct[ll]})
@@ -406,7 +411,6 @@ def travel():
             ['Historic sites','Nature scenery','Classic cuisine','Traffic conditions']]
             }
             if st.session_state.area and area:
-                st.session_state.area=False
                 message.pop()
                 message.append({"role":"user","content":ca[ll][0]})
                 res = chatgpt(message,max_tokens=500,temperature=0)
@@ -431,27 +435,27 @@ def travel():
                 st.write(ca[ll][4][3])
                 st.write(res)
         
-                more = st.selectbox(
-                '详细了解(Detailed introduction)',
-                ca[ll][4], #也可以用元组
-                index = 0
-                )
-                intro = {"中文":"请详细介绍%s%s的%s"%(country,area,more),"English":"Please tell us more about the (%s) of %s,%s"%(more,area,country)}
-                message.pop()
-                message.append({"role":"user","content":intro[ll]})
-                res = chatgpt(message,max_tokens=500,temperature=0)
+                more = st.selectbox('详细了解(Detailed introduction)',ca[ll][4], index = 0,on_change=more_detail)
+                if st.session_state.more_detail and more:
+                    intro = {"中文":"请详细介绍%s%s的%s"%(country,area,more),"English":"Please tell us more about the (%s) of %s,%s"%(more,area,country)}
+                    message.pop()
+                    message.append({"role":"user","content":intro[ll]})
+                    res = chatgpt(message,max_tokens=500,temperature=0)
                 st.write(res)
 
     return
 
 def career_plan():
-    st.session_state.career1=  True
+    st.session_state.career1 = True
+    st.session_state.career2 = False
+    st.session_state.career3 = False
 
 def re_plan():
-    st.session_state.career2=  True
+    st.session_state.career2 = True
+    st.session_state.career3 = False
 
 def career_analyze():
-    st.session_state.career3=  True
+    st.session_state.career3 = True
 
 def career():
     st.title("Emma & GPT")    
@@ -491,7 +495,6 @@ def career():
     msg =mm[ll]['prompt'][0]
     st.button(mm[ll]['btn'][0],on_click=career_plan)
     if st.session_state.career1 and interest and skill and values:
-        st.session_state.career1=False
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=300,temperature=0.6)
         st.write(res)
@@ -499,7 +502,6 @@ def career():
         msg =mm[ll]['prompt'][1]
         st.button(mm[ll]['btn'][1],on_click=re_plan)
         if st.session_state.career2:
-            st.session_state.career2=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":msg})
             res = chatgpt(message,max_tokens=300,temperature=0.8)
@@ -507,7 +509,6 @@ def career():
         
         st.button(mm[ll]['btn'][2],on_click=career_analyze)
         if st.session_state.career3:
-            st.session_state.career3=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":mm[ll]['prompt'][2]})
             res = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -516,10 +517,11 @@ def career():
     return
 
 def writer_ok():
-    st.session_state.writer_ok =  True
+    st.session_state.writer_ok = True
+    st.session_state.writer_other = False
 
 def writer_other():
-     st.session_state.writer_other =True
+     st.session_state.writer_other = True
 
 
 def writer():
@@ -545,14 +547,12 @@ def writer():
     msg = "Please recommend an author who is adept at writing %s %s"%(nsize,ntype)
     st.button("OK",on_click=writer_ok)
     if st.session_state.writer_ok and msg:
-        st.session_state.writer_ok=False
         message  = [{"role":"system","content":'A literary critic'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
         st.button("Another One",on_click=writer_other)
         if st.session_state.writer_other:
-            st.session_state.writer_other=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":"recommend another one"})
             res = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -561,6 +561,7 @@ def writer():
 
 def science_explain():
     st.session_state.explain =  True
+    st.session_state.science_more=False
 
 def science_more():
      st.session_state.science_more =True
@@ -586,13 +587,11 @@ def science():
     ques = st.text_input("You want to know the science behind what?",placeholder="What,Where,When")
     st.button("Why?",on_click=science_explain)
     if st.session_state.explain and ques:
-        st.session_state.explain=False
         message.append({"role":"user","content":"Explain this matter from a scientific perspective:%s"%(ques)})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
         st.button("Know More",on_click=science_more)
         if st.session_state.science_more and res:
-            st.session_state.science_more=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":"What other examples of this scientific principle exist"})
             res2 = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -646,7 +645,6 @@ def freetalk():
     msg = st.text_input("What do you want to know:",placeholder="Anything")
     st.button("OK",on_click=freetalk_ok)
     if st.session_state.freetalk_ok and msg:
-        st.session_state.freetalk_ok =True
         message  = [{"role":"system","content":'Jack of all trades'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
