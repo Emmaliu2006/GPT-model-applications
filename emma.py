@@ -123,23 +123,23 @@ def get_key():
     expand.write(helps[lang])
     return
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def chatgpt(message,max_tokens=100,temperature=0):
     if 'api_key' not in st.session_state or not st.session_state.api_key:
         st.warning("请先输入你的API Key(Please enter your API Key first)")
         return "Failed"
     else:
         openai.api_key = st.session_state.api_key
-
-    rsp = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=message,
-        max_tokens=max_tokens,
-        temperature = temperature
-    )
+    with st.spinner("Waiting for it..."):
+        rsp = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=message,
+            max_tokens=max_tokens,
+            temperature = temperature
+        )
     return rsp.get("choices")[0]["message"]["content"]
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_info(pname,message,lang='中文'):
     tips={'中文':["%s是哪个国家哪个年代的人,他的生卒时间"%(pname),'简单介绍一下这个人物的生平'],
     'English':['What country and era was %s from, and what were his birth and death dates?'%(pname),'Briefly introduce the life of this character']}
@@ -153,7 +153,7 @@ def get_info(pname,message,lang='中文'):
     return res1,res2
     
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_more(people,message,lang='中文'):
     tips={'中文':["与%s同时代的名人有哪些"%(people),"%s出现在哪些影视作品中"%(people)],
     'English':['What are the famous figures of the same era as %s'%(people),'Which film and television works does %s appear in'%(people)]}
@@ -166,7 +166,7 @@ def get_more(people,message,lang='中文'):
     res2=chatgpt(message,max_tokens=500,temperature=0)
     return res1,res2
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_emotion(ques,state,message,lang='中文'):
     tips={'中文':["我遇到了一个问题:%s,我的当前心情是%s,请对这种情况做个简单的分析"%(ques,state),'就前面的问题,请给出几条建议(每条建议不超过100个汉字)'],
     'English':["I'm having a problem:%s,My current mood is %s,Please do a simple analysis of this situation"%(ques,state),
@@ -218,6 +218,7 @@ def people():
     
     st.button(tips[ll]['sub1'],on_click=info_click)
     if  st.session_state.click_start:
+        st.session_state.click_start = False 
         if not pname:
             st.write(tips[ll]["err"])
             return
@@ -228,6 +229,7 @@ def people():
 
         st.button(tips[ll]['sub2'],on_click=more_click)
         if st.session_state.click_more:
+            st.session_state.click_more = False 
             message.pop()
             rtn = get_more(pname,message,ll)
             st.subheader(tips[ll]['lab2'])
@@ -289,10 +291,10 @@ def story():
     'русский': {'title': "Добро пожаловать в клуб историй Эммы:",'lang': "Пожалуйста, выберите язык",'length': "Пожалуйста, введите длину истории",'type': "Какой тип истории вы хотите услышать?",
     'char': "Кто герои истории?",'la': "Где происходит история?",'end': "Какой тип конца истории вы хотите?",'btn': "Создать историю",'plot':"Степень необычности сюжета"}}
     
-    if 'cont' not in  st.session_state:
-        st.session_state.cont = ""
+    # if 'cont' not in  st.session_state:
+    #     st.session_state.cont = ""
 
-    st.text(st.session_state.cont)
+    # st.text(st.session_state.cont)
 
     if 'story' not in st.session_state:
         st.session_state.story=False
@@ -320,6 +322,7 @@ def story():
     st.button(tips[lang]['btn'],on_click=get_story)
 
     if st.session_state.story:
+        st.session_state.story=False
         msg ="写一个故事，不超过%s个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
         if lang != '中文':
             message.append({"role":"user","content":"请把{}翻译成{}".format(msg,lang)})
@@ -329,9 +332,9 @@ def story():
             message.pop()
         
         message.append({"role":"user","content":msg})
-        rtn = chatgpt(message,max_tokens=params["length"]*2,temperature=0.6)
-        #st.write(rtn)
-        st.session_state.cont = rtn
+        rtn = chatgpt(message,max_tokens=2000,temperature=0.6)
+        st.write(rtn)
+        #st.session_state.cont = rtn
 
     return
 
@@ -378,6 +381,7 @@ def travel():
     
     st.button(cont[ll][5][0],on_click=choose_continent)
     if st.session_state.continent:
+        st.session_state.continent=False
         message.append({"role":"user","content":cont[ll][0]})
         obj = chatgpt(message,max_tokens=500,temperature=0)
         st.write(obj)
@@ -386,6 +390,7 @@ def travel():
         st.button(cont[ll][5][1],on_click=choose_country)
 
         if st.session_state.country and country:
+            st.session_state.country=False
             message.pop()
             ct={'中文':"列举%s所有的省(州、邦)"%(country),'English':"List all %s provinces (states)"%(country)}
             message.append({"role":"user","content":ct[ll]})
@@ -401,6 +406,7 @@ def travel():
             ['Historic sites','Nature scenery','Classic cuisine','Traffic conditions']]
             }
             if st.session_state.area and area:
+                st.session_state.area=False
                 message.pop()
                 message.append({"role":"user","content":ca[ll][0]})
                 res = chatgpt(message,max_tokens=500,temperature=0)
@@ -485,6 +491,7 @@ def career():
     msg =mm[ll]['prompt'][0]
     st.button(mm[ll]['btn'][0],on_click=career_plan)
     if st.session_state.career1 and interest and skill and values:
+        st.session_state.career1=False
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=300,temperature=0.6)
         st.write(res)
@@ -492,6 +499,7 @@ def career():
         msg =mm[ll]['prompt'][1]
         st.button(mm[ll]['btn'][1],on_click=re_plan)
         if st.session_state.career2:
+            st.session_state.career2=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":msg})
             res = chatgpt(message,max_tokens=300,temperature=0.8)
@@ -499,6 +507,7 @@ def career():
         
         st.button(mm[ll]['btn'][2],on_click=career_analyze)
         if st.session_state.career3:
+            st.session_state.career3=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":mm[ll]['prompt'][2]})
             res = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -536,12 +545,14 @@ def writer():
     msg = "Please recommend an author who is adept at writing %s %s"%(nsize,ntype)
     st.button("OK",on_click=writer_ok)
     if st.session_state.writer_ok and msg:
+        st.session_state.writer_ok=False
         message  = [{"role":"system","content":'A literary critic'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
         st.button("Another One",on_click=writer_other)
         if st.session_state.writer_other:
+            st.session_state.writer_other=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":"recommend another one"})
             res = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -575,11 +586,13 @@ def science():
     ques = st.text_input("You want to know the science behind what?",placeholder="What,Where,When")
     st.button("Why?",on_click=science_explain)
     if st.session_state.explain and ques:
+        st.session_state.explain=False
         message.append({"role":"user","content":"Explain this matter from a scientific perspective:%s"%(ques)})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
         st.write(res)
         st.button("Know More",on_click=science_more)
         if st.session_state.science_more and res:
+            st.session_state.science_more=False
             message.append({"role":"assistant","content":res})
             message.append({"role":"user","content":"What other examples of this scientific principle exist"})
             res2 = chatgpt(message,max_tokens=800,temperature=0.5)
@@ -633,6 +646,7 @@ def freetalk():
     msg = st.text_input("What do you want to know:",placeholder="Anything")
     st.button("OK",on_click=freetalk_ok)
     if st.session_state.freetalk_ok and msg:
+        st.session_state.freetalk_ok =True
         message  = [{"role":"system","content":'Jack of all trades'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=800,temperature=0.5)
