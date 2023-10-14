@@ -271,9 +271,7 @@ def get_story():
 
 def story():
     st.title("Emma & GPT")    
-    
-    message  = [{"role":"system","content":"作家"}]
-
+   
     tips = {'中文': {'title': "欢迎来到艾玛的故事会",'lang': "请选择语言种类:",'length': "请输入故事长度",'type': "您想听什么类型的故事?",
     'char': "故事有哪些角色?",'la': "故事发生在什么地方?",'end': "您想要什么样的故事结局?",'btn': "生成故事",'plot':"情节离奇程度"},
     'English': {'title': "Welcome to Emma's Story Club:",'lang': "Please select language",'length': "Please enter the length of the story",'type': "What type of story do you want to hear?",
@@ -320,14 +318,15 @@ def story():
 
     if st.session_state.story:
         st.session_state.story=False
-        msg ="用{}写一个故事，不超过{}个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(story_lang[lang],params["length"],params['type'] ,params['char'],params['la'],params['end'])
-        # if lang != '中文':
-        #     message.append({"role":"user","content":"请把下面这句话:{},翻译成{}".format(msg,lang)})
-        #     msg = chatgpt(message,max_tokens=500,temperature=0)
-        #     if msg == "Failed":
-        #         return
-        #     message.pop()
-        
+        msg ="写一个故事，不超过{}个字,包含以下要素:{}类型的故事,主角是{},地点在{},故事有一个{}结局".format(params["length"],params['type'] ,params['char'],params['la'],params['end'])
+        if lang != '中文':
+            message  = [{"role":"system","content":"翻译家"}]
+            message.append({"role":"user","content":'请把下面这句话:"{}",翻译成{}'.format(msg,story_lang[lang])})
+            msg = chatgpt(message,max_tokens=500,temperature=0)
+            if msg == "Failed":
+                return
+
+        message  = [{"role":"system","content":"作家"}]
         message.append({"role":"user","content":msg})
         rtn = chatgpt(message,max_tokens=params['length']*2,temperature=0.6)
         st.write(rtn)
