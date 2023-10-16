@@ -145,11 +145,11 @@ def get_info(pname,message,lang='中文'):
     'English':['What country and era was %s from, and what were his birth and death dates?'%(pname),'Briefly introduce the life of this character']}
     msg = tips[lang][0]
     message.append({"role":"user","content":msg})
-    res1=chatgpt(message,max_tokens=100,temperature=0)
+    res1=chatgpt(message,max_tokens=200,temperature=0)
     message.append({"role":"assistant","content":res1})
     msg =  tips[lang][1]
     message.append({"role":"user","content":msg})
-    res2=chatgpt(message,max_tokens=500,temperature=0)
+    res2=chatgpt(message,max_tokens=1000,temperature=0)
     return res1,res2
     
 
@@ -159,11 +159,11 @@ def get_more(people,message,lang='中文'):
     'English':['What are the famous figures of the same era as %s'%(people),'Which film and television works does %s appear in'%(people)]}
     msg = tips[lang][0]
     message.append({"role":"user","content":msg})
-    res1=chatgpt(message,max_tokens=200,temperature=0)
+    res1=chatgpt(message,max_tokens=500,temperature=0)
     message.append({"role":"assistant","content":res1})
     msg = tips[lang][1]
     message.append({"role":"user","content":msg})
-    res2=chatgpt(message,max_tokens=500,temperature=0)
+    res2=chatgpt(message,max_tokens=1000,temperature=0)
     return res1,res2
 
 @st.cache_data(show_spinner=False)
@@ -173,11 +173,11 @@ def get_emotion(ques,state,message,lang='中文'):
     'On the previous question, please give a few suggestions (no more than 200 words each)']}
     msg = tips[lang][0]
     message.append({"role":"user","content":msg})
-    res1=chatgpt(message,max_tokens=300,temperature=0.8)
+    res1=chatgpt(message,max_tokens=600,temperature=0.8)
     message.append({"role":"assistant","content":res1})
     msg = tips[lang][1]
     message.append({"role":"user","content":msg})
-    res2=chatgpt(message,max_tokens=800,temperature=0.8)
+    res2=chatgpt(message,max_tokens=1200,temperature=0.8)
     return res1,res2
 
 def info_click():
@@ -302,11 +302,11 @@ def story():
     lang = st.session_state.lang
     st.header(tips[lang]['title'])
     
-    st.subheader(tips[lang]['lang'])
+    #st.subheader(tips[lang]['lang'])
     
     lang = st.session_state.lang
     
-    params['length'] =  st.slider(tips[lang]['length'],min_value=300,max_value=1000,value=600)
+    params['length'] =  st.slider(tips[lang]['length'],min_value=550,max_value=1000,value=600,step=10)
     params['type'] = st.text_input(tips[lang]['type'])
     params['char'] = st.text_input(tips[lang]['char'])
     params['la'] = st.text_input(tips[lang]['la'])
