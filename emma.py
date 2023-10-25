@@ -306,7 +306,7 @@ def story():
     
     lang = st.session_state.lang
     
-    params['length'] =  st.slider(tips[lang]['length'],min_value=550,max_value=1000,value=600,step=10)
+    params['length'] =  st.slider(tips[lang]['length'],min_value=500,max_value=1000,value=600,step=10)
     params['type'] = st.text_input(tips[lang]['type'])
     params['char'] = st.text_input(tips[lang]['char'])
     params['la'] = st.text_input(tips[lang]['la'])
