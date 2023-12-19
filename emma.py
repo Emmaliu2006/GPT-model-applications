@@ -125,6 +125,7 @@ def get_key():
 
 @st.cache_data(show_spinner=False)
 def chatgpt(message,max_tokens=100,temperature=0):
+    st.write(st.session_state.api_key)
     if 'api_key' not in st.session_state or not st.session_state.api_key:
         st.warning("请先输入你的API Key(Please enter your API Key first)")
         return "Failed"
