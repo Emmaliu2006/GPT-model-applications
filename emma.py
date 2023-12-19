@@ -646,7 +646,6 @@ def freetalk():
     msg = st.text_area("What do you want to know:", value='', key=None)
     st.button("OK",on_click=freetalk_ok)
     if st.session_state.freetalk_ok and msg:
-        st.write(st.session_state.api_key)
         message  = [{"role":"system","content":'Jack of all trades'}]
         message.append({"role":"user","content":msg})
         res = chatgpt(message,max_tokens=1000,temperature=0)
