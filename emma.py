@@ -706,8 +706,8 @@ menu = {'中文':['使用演示','API Key','历史人物','情绪支持','故事
 'Choix de carrière','Auteurs recommandés','Le monde scientifique','Planification du calendrier','Parler librement'],
 'Deutsch':['Anwendungsdemonstration','API Key','Historische Figur','Emotionale Unterstützung','Geschichtenerzähler','Reiseempfehlungen','Berufswahl','Empfohlener Autor','Die wissenschaftliche Welt','Zeitplanung','Freies Gespräch'],
 'русский':['Демонстрация приложений','API Key','Исторические личности','Эмоциональная поддержка','Рассказчик.','Туристические рекомендации','Выбор профессии','Рекомендуем писателей','Научный мир','График','Свободный разговор']}
-app.add_app(menu[lang][1], get_key)
 app.add_app(menu[lang][0], demo)
+app.add_app(menu[lang][1], get_key)
 app.add_app(menu[lang][2], people)
 app.add_app(menu[lang][3], emotion)
 app.add_app(menu[lang][4], story)
