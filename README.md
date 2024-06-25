@@ -24,6 +24,7 @@ If you like this project please let us know by starring it!
 [Demo video](https://github.com/Emmaliu2006/streamlit/blob/master/demo.mp4)
 
 ## Dev Dairy
+📘 06/25/2024 Programs completed
 📘 10/xx/2023: More functions(Writer recommendation、Science World、Schedule planning...) will coming soon    
 📘 10/02/2023: Complete the production of the demonstration video after repeated modifications  
 📘 09/25/2023: Start making demonstration videos  
